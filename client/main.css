@@ -1,0 +1,113 @@
+body {
+	background-color: #fff2e6;
+}
+
+/* ############################################################### */
+/* ############################################################### */
+/* top panel */
+.navbar {
+	margin-bottom: 0px;
+	min-height: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* ############################################################### */
+/* ############################################################### */
+/* mainContent */
+.allActivities {
+	display: inline-block;
+	padding-left: 20px;
+}
+.activity {
+	display: inline-block;
+	padding: 20px;
+	font-size: 14px;
+}
+.activityTitle {
+	background-color: transparent;
+    border: none;
+    font-size: 20px;
+    width: auto;
+}
+.activityTitle:focus {outline: 0;}
+ul {
+	/*position: absolute;*/
+	padding: 0;
+	display: table-cell;
+}
+ul:focus {outline: 0;}
+
+.js-addTask {
+	border: none;
+	background-color: transparent;
+}
+.js-addTask:hover, .js-addTask:focus, .js-addTask:active {
+	background-color: transparent !important;
+	box-shadow: none !important;
+	border-color: transparent !important;
+	outline: 0 !important;
+}
+
+.btn-danger {
+	min-width: 120px;
+}
+input {
+	border: none;
+	width: auto;
+}
+input:focus {outline: none;}
+
+.js-deleteButton, .js-deleteActivity, .js-addActivityButton {
+	display: inline;
+	border: none;
+	background-color: transparent;
+}
+.js-deleteButton:hover, .js-deleteButton:focus, .js-deleteActivity:hover, .js-deleteActivity:focus, .js-addActivityButton:hover, .js-addActivityButton:focus {
+	border-color: transparent !important;
+	outline: 0 !important;
+	background-color: transparent !important;
+	box-shadow: none !important;
+}
+
+.input-group {
+	display: inline-flex;
+}
+
+.js-task {
+	background-color: transparent;
+    border: none;
+}
+.js-task:focus {outline: 0;}
+
+.js-addActivityButton {
+	display: inline-block;
+	padding: 15px;
+	background-color: transparent;
+}
+.js-addActivityButton:active {
+	background-color: transparent !important;
+	box-shadow: none !important;
+}
+.btn-xlg {
+	padding: 18px 28px;
+	font-size: 28px;
+	line-height: normal;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+
+.js-addActivity {
+	display: inline-block;
+}
+
