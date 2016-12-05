@@ -2,10 +2,6 @@ import { Meteor } from 'meteor/meteor';
 
 var Activities = new Mongo.Collection("activities");
 
-Meteor.startup(() => {
-  // code to run on server at startup
-});
-
 Meteor.publish("activities", function() {
 	return Activities.find();
 });
