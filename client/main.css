@@ -1,5 +1,5 @@
 body {
-	background-color: #fff2e6;
+	background-color: #ffe5cc;
 }
 
 /* ############################################################### */
@@ -27,11 +27,14 @@ body {
 .allActivities {
 	display: inline-block;
 	padding-left: 20px;
+	padding-top: 20px;
 }
 .activity {
 	display: inline-block;
 	padding: 20px;
 	font-size: 14px;
+	background-color: #fff2e6;
+	border-radius: 25px;
 }
 .activityTitle {
 	background-color: transparent;

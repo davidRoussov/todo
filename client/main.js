@@ -3,24 +3,30 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import './main.html';
 import { Accounts } from 'meteor/accounts-base';
 
+import { Random } from 'meteor/random';
+for (var i = 1; i < 20; i++) {
+	console.log(Random.id());
+}
+
 var Activities = new Mongo.Collection("activities");
  
 Accounts.ui.config({
   passwordSignupFields: 'USERNAME_ONLY',
-})
-
-Session.keys = {};
+});
 
 Meteor.subscribe("activities");
+
 
 Template.mainContent.helpers({
 	activities:function() {
 		// try to get activities if only if they exist
 		try { 
-			Session.set("activities", Activities.findOne({"owner": Meteor.userId()})["activities"]);
-	  		return Session.get("activities");	
+			var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
+			activities = activities.sort(compare);
+			Session.set("activities", activities);
 		} catch(err) {}
-
+	
+		return Session.get("activities");
 	}
 });
 
@@ -72,17 +78,6 @@ Template.mainContent.events({
 			Session.set("activities", result);
 		});
 	},
-	// "mousedown .activityTitle":function(event) {
-	// 	console.log('mousedown');
-	// 	clearTimeout(this.downTimer);
-	// 	this.downTimer = setTimeout(function() {
-	// 		console.log("two seconds");
-			
-	// 	}, 2000);
-	// },
-	// "mouseup .activityTitle":function(event) {
-	// 	clearTimeout(this.downTimer);
-	// },
 	"keydown .activityTitle":function(event) {
 	  $(event.target).removeAttr("style");
 	  $(event.target).attr("size", $(event.target).val().length);
@@ -108,3 +103,37 @@ Template.mainContent.events({
 	}
 
 });
+
+Template.mainContent.rendered = function() {
+	this.$('.allActivities').sortable({
+		stop: function(e, ui) {
+
+			el = ui.item.get(0);
+			before = ui.item.prev().get(0);
+			after = ui.item.next().get(0);
+
+			if (!before) {
+				newRank = Blaze.getData(after).rank - 1;
+			} else if (!after) {
+				newRank = Blaze.getData(before).rank + 1;
+			} else if (before.className === "activity" && after.className === "activity") {
+	        	newRank = (Blaze.getData(after).rank + Blaze.getData(before).rank)/2;				
+			}
+
+			if (newRank) {
+				Meteor.call("updateActivityRank", Blaze.getData(el)._id, newRank);
+			} else {
+				console.log("hi");
+			}
+
+		}
+	});
+};
+
+function compare(a,b) {
+	if (a.rank < b.rank)
+		return -1;
+	if (a.rank > b.rank)
+		return 1;
+	return 0;
+}

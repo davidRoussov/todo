@@ -1,3 +1,7 @@
+
+
+
+
 <head>
   <title>activities</title>
 </head>
@@ -6,7 +10,9 @@
 
   {{> topPanel}}
 
-  {{> mainContent}}
+  <div class="main-content"> 
+    {{> mainContent}}
+  </div>
 
 </body>
 
@@ -28,7 +34,7 @@
 
   <div class="allActivities">
     {{#each activities}}
-    <div class="activity">
+    <div class="activity" id={{_id}}>
 
       <!--a small delete button together with an input that contains the activity name-->
       <div class="input-group">
@@ -63,12 +69,13 @@
     </div>
     {{/each}}
 
-    <!-- large plus button at end of all activities to add a new activity-->
-    <div class="js-addActivity">
-      <button type="button" class="btn btn-default btn-xlg js-addActivityButton">
-          <span class="glyphicon glyphicon-plus"></span>
-      </button>
-    </div>
+  </div>
+
+  <!-- large plus button at end of all activities to add a new activity-->
+  <div class="js-addActivity">
+    <button type="button" class="btn btn-default btn-xlg js-addActivityButton">
+        <span class="glyphicon glyphicon-plus"></span>
+    </button>
   </div>
 
 
