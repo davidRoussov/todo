@@ -8,28 +8,24 @@ Meteor.publish("activities", function() {
 });
 
 Meteor.methods({
-	addNewTask:function(activity) {
+	addNewTask:function(activityId) {
 
-		if (typeof activity !== "undefined") {
-			var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
+	 	var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
+     	for (var i = 0; i < activities.length; i++) {
+        	if (activities[i]["_id"] === activityId) {
+          		activities[i]["tasks"].push({task: ""});
+        	}
+      	}
 
-	     	for (var i = 0; i < activities.length; i++) {
-	        	if (activities[i]["title"] === activity) {
-	          		activities[i]["tasks"].push({task: ""});
-	        	}
-	      	}
+      	var newDoc = createUpdatedDocument(activities);
+	    Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
 
-			var newDoc = createUpdatedDocument(activities);
-	      	Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
-
-	      	return activities;
-	    }	
 	},
-	deleteTask:function(activity, taskIndex) {
+	deleteTask:function(activityId, taskIndex) {
 		var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
 		var i, j;
 		for (i = 0; i < activities.length; i++) {
-		  if (activities[i]["title"] === activity) {
+		  if (activities[i]["_id"] === activityId) {
 		    activities[i]["tasks"].splice(taskIndex, 1);
 		  }
 		}
@@ -39,11 +35,11 @@ Meteor.methods({
 
 		return activities;
 	},
-	modifyTask:function(updateTask, activity, taskIndex) {
+	modifyTask:function(updateTask, activityId, taskIndex) {
 		var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
 		var i, j;
 		for (i = 0; i < activities.length; i++) {
-		  if (activities[i]["title"] === activity) {
+		  if (activities[i]["_id"] === activityId) {
 		    activities[i]["tasks"][taskIndex] = {task: updateTask};
 		  }
 		}
@@ -53,13 +49,17 @@ Meteor.methods({
 
 		return activities;
 	},
-	updateActivityTitle:function(activityIndex, newTitle) {
+	updateActivityTitle:function(activityId, newTitle) {
 		var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
 
-		activities[activityIndex]["title"] = newTitle;
+		var i;
+		for (i = 0; i < activities.length; i++) {
+			if (activities[i]["_id"] === activityId) {
+				activities[i]["title"] = newTitle;
+			}
+		}
 
 		var newDoc = createUpdatedDocument(activities);
-
 		Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
 
 		return activities;
@@ -94,19 +94,17 @@ Meteor.methods({
 		}
 
 	},
-	deleteActivity:function(activityTitle) {
+	deleteActivity:function(activityId) {
 		var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
 		var i, j;
 		for (i = 0; i < activities.length; i++) {
-		  if (activities[i]["title"] === activityTitle) {
+		  if (activities[i]["_id"] === activityId) {
 		    activities.splice(i, 1);
 		  }
 		}
 
 		var newDoc = createUpdatedDocument(activities);
 		Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
-
-		return activities;
 	},
 	updateActivityRank:function(_id, newRank) {
 		var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];

@@ -3,11 +3,6 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import './main.html';
 import { Accounts } from 'meteor/accounts-base';
 
-import { Random } from 'meteor/random';
-for (var i = 1; i < 20; i++) {
-	console.log(Random.id());
-}
-
 var Activities = new Mongo.Collection("activities");
  
 Accounts.ui.config({
@@ -32,74 +27,48 @@ Template.mainContent.helpers({
 
 Template.mainContent.events({
 	"click .js-addTask":function(event) {
-		// CHANGE THIS
-		// avoid assuming acitvity titles are unique
-		var activity = $(event.target).attr("id");
-
-		Meteor.call("addNewTask", activity, function(error, result) {
-			Session.set("activities", result);
-		});
-	 
+		var button = $(event.currentTarget);
+		var activityId = button.parent().parent().parent().attr("id");
+		
+		Meteor.call("addNewTask", activityId);
 	},
 	"click .js-deleteButton":function(event) {
+		var button = $(event.currentTarget);
+		var activityId = button.parent().parent().parent().attr("id");
+		var taskIndex = (button.parent().index()) / 2;
 
-	  var activity, taskIndex;
-	  console.log($(event.target).is("span"));
-	  if ($(event.target).is("span")) {
-	    activity = $(event.target).parent().parent().parent().prev().children().eq(1).val();
-	    taskIndex = $(event.target).parent().parent().index();
-	  } else {
-	    activity = $(event.target).parent().parent().prev().children().eq(1).val();
-	    taskIndex = $(event.target).parent().index();
-	  }
-	  taskIndex/=2;
+	 	Meteor.call("deleteTask", activityId, taskIndex);
+	},
+	"keyup .js-task":function(event) {
+		var inputField = $(event.target);
+		var newTask = inputField.val();
+		var activityId = inputField.parent().parent().parent().attr("id");
+		var taskIndex = inputField.parent().index() / 2;
 
-	  Meteor.call("deleteTask", activity, taskIndex, function(error, result) {
-	    Session.set("activities", result);
-	  });
+		Meteor.call("modifyTask", newTask, activityId, taskIndex);
 	},
-	"change .js-task":function(event) {
-	  var task = $(event.target).val();
-	  var activity = $(event.target).parent().parent().prev().children().eq(1).val();
-	  var taskIndex = $(event.target).parent().index()/2;
+	// "keydown .js-task":function(event) {
+	//   $(event.target).attr("size", $(event.target).val().length);
+	// },
+	"keyup .activityTitle":function(event) {
+		var inputField = $(event.target);
+		var activityId = inputField.parent().parent().attr("id");
+		var newTitle = inputField.val();
 
-	  Meteor.call("modifyTask", task, activity, taskIndex, function(error, result) {
-	    Session.set("activities", result);
-	  });
+		Meteor.call("updateActivityTitle", activityId, newTitle);
 	},
-	"keydown .js-task":function(event) {
-	  $(event.target).attr("size", $(event.target).val().length);
-	},
-	"change .activityTitle":function(event) {
-		var activityIndex = $(event.target).parent().parent().index();
-		var newActivityTitle = $(event.target).val();
-
-		Meteor.call("updateActivityTitle", activityIndex, newActivityTitle, function(error, result) {
-			Session.set("activities", result);
-		});
-	},
-	"keydown .activityTitle":function(event) {
-	  $(event.target).removeAttr("style");
-	  $(event.target).attr("size", $(event.target).val().length);
-	},
+	// "keydown .activityTitle":function(event) {
+	//   $(event.target).removeAttr("style");
+	//   $(event.target).attr("size", $(event.target).val().length);
+	// },
 	"click .js-deleteActivity":function(event) {
-		// CHANGE THIS
-		// currently, system assumes that activity titles are distinct but this is bad
-		var activityTitle;
-		if ($(event.target).is("span")) {
-			activityTitle = $(event.target).parent().next().val();
-		} else {
-			activityTitle = $(event.target).next().val();
-		}
-
-		Meteor.call("deleteActivity", activityTitle, function(error, result) {
-			Session.set("activities", result);
-		});
+		var button = $(event.currentTarget);
+		var activityId = button.parent().parent().attr("id");
+		
+		Meteor.call("deleteActivity", activityId);
 	},
 	"click .js-addActivityButton":function(event) {
-	  Meteor.call("addNewActivity", function(error, result) {
-	    Session.set("activities", result);
-	  });
+	  Meteor.call("addNewActivity");
 	}
 
 });
