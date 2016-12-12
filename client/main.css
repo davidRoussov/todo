@@ -13,6 +13,43 @@ body {
 
 
 
+.tooltip {
+  z-index: 1001;
+  pointer-events: none;
+  transition: opacity .1s ease-out;
+  opacity: 0;
+
+  background-color: white;
+  border-radius: 5px;
+  font-size: 18px;
+  padding: 2px;
+}
+
+.tooltip.hide {
+  opacity: 0;
+}
+
+.tooltip.show {
+  opacity: 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -30,6 +67,10 @@ body {
 	display: inline-block;
 	padding: 20px;
 	font-size: 14px;
+	width: 18%;
+}
+.activity-content {
+	width: 75% !important;
 }
 .activityTitle {
 	background-color: transparent;
@@ -60,8 +101,8 @@ ul:focus {outline: 0;}
 	min-width: 120px;
 }
 input {
-	border: none;
-	width: auto;
+	width: 100% !important;
+
 }
 input:focus {outline: none;}
 

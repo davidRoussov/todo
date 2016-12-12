@@ -37,14 +37,14 @@
     <div class="activity" id={{_id}}>
 
       <!--a small delete button together with an input that contains the activity name-->
-      <div class="input-group">
+      <div class="input-group activity-content">
         <button type="button" class="btn btn-default btn-xs js-deleteActivity">
         <span class="glyphicon glyphicon-remove"></span>
         </button>
-        <input type="text" class="activityTitle" value={{title}} ><br>
+        <input data-tooltip={{title}} type="text" class="activityTitle" value={{title}} ><br>
       </div>
 
-      <ul class="list-group">
+      <ul class="list-group activity-content">
       {{#each tasks}} 
 
         <!--a small delete button together with an input that contains a task-->
@@ -52,7 +52,7 @@
           <button type="button" class="btn btn-default btn-xs js-deleteButton" id={{_id}}>
         <span class="glyphicon glyphicon-remove"></span>
           </button>
-          <input class="js-task" value={{task}}>
+          <input data-tooltip={{task}} class="js-task" value={{task}}>
         </div>
         <br>
 
@@ -79,5 +79,6 @@
   </div>
 
 
+  {{> tooltips}}
 
 </template>

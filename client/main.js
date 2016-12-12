@@ -11,7 +11,6 @@ Accounts.ui.config({
 
 Meteor.subscribe("activities");
 
-
 Template.mainContent.helpers({
 	activities:function() {
 		// try to get activities if only if they exist
@@ -39,7 +38,7 @@ Template.mainContent.events({
 
 	 	Meteor.call("deleteTask", activityId, taskIndex);
 	},
-	"keyup .js-task":function(event) {
+	"change .js-task":function(event) {
 		var inputField = $(event.target);
 		var newTask = inputField.val();
 		var activityId = inputField.parent().parent().parent().attr("id");
@@ -50,7 +49,7 @@ Template.mainContent.events({
 	// "keydown .js-task":function(event) {
 	//   $(event.target).attr("size", $(event.target).val().length);
 	// },
-	"keyup .activityTitle":function(event) {
+	"change .activityTitle":function(event) {
 		var inputField = $(event.target);
 		var activityId = inputField.parent().parent().attr("id");
 		var newTitle = inputField.val();
