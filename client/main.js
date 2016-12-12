@@ -13,7 +13,7 @@ Meteor.subscribe("activities");
 
 Template.mainContent.helpers({
 	activities:function() {
-		// try to get activities if only if they exist
+		// try to get activities only if they exist
 		try { 
 			var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
 			activities = activities.sort(compare);
@@ -44,22 +44,25 @@ Template.mainContent.events({
 		var activityId = inputField.parent().parent().parent().attr("id");
 		var taskIndex = inputField.parent().index() / 2;
 
-		Meteor.call("modifyTask", newTask, activityId, taskIndex);
+		Meteor.call("modifyTask", newTask, activityId, taskIndex, function() {
+			$(event.target).css("color", "black");
+		});
 	},
-	// "keydown .js-task":function(event) {
-	//   $(event.target).attr("size", $(event.target).val().length);
-	// },
+	"input .js-task":function(event) {
+		$(event.target).css("color", "red");
+	},
 	"change .activityTitle":function(event) {
 		var inputField = $(event.target);
 		var activityId = inputField.parent().parent().attr("id");
 		var newTitle = inputField.val();
 
-		Meteor.call("updateActivityTitle", activityId, newTitle);
+		Meteor.call("updateActivityTitle", activityId, newTitle, function() {
+			$(event.target).css("color", "black");
+		});
 	},
-	// "keydown .activityTitle":function(event) {
-	//   $(event.target).removeAttr("style");
-	//   $(event.target).attr("size", $(event.target).val().length);
-	// },
+	"input .activityTitle":function(event) {
+		$(event.target).css("color", "red");
+	},
 	"click .js-deleteActivity":function(event) {
 		var button = $(event.currentTarget);
 		var activityId = button.parent().parent().attr("id");
@@ -90,10 +93,7 @@ Template.mainContent.rendered = function() {
 
 			if (newRank) {
 				Meteor.call("updateActivityRank", Blaze.getData(el)._id, newRank);
-			} else {
-				console.log("hi");
 			}
-
 		}
 	});
 };

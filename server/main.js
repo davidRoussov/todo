@@ -32,8 +32,6 @@ Meteor.methods({
 
 		var newDoc = createUpdatedDocument(activities);
 		Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
-
-		return activities;
 	},
 	modifyTask:function(updateTask, activityId, taskIndex) {
 		var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
@@ -46,8 +44,6 @@ Meteor.methods({
 
 		var newDoc = createUpdatedDocument(activities);
 		Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
-
-		return activities;
 	},
 	updateActivityTitle:function(activityId, newTitle) {
 		var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
@@ -61,8 +57,6 @@ Meteor.methods({
 
 		var newDoc = createUpdatedDocument(activities);
 		Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
-
-		return activities;
 	},
 	addNewActivity:function() {
 		var userExistence = Activities.findOne({"owner": Meteor.userId()});
@@ -80,8 +74,6 @@ Meteor.methods({
 			var newDoc = createUpdatedDocument(activities);
 
 			Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
-
-			return activities;
 		}
 		else {
 			activities = [json];
@@ -89,8 +81,6 @@ Meteor.methods({
 			var newDoc = createUpdatedDocument(activities);
 			
 			Activities.insert(newDoc);
-
-			return activities;
 		}
 
 	},
@@ -114,13 +104,8 @@ Meteor.methods({
 				activities[i]["rank"] = newRank;
 				var newDoc = createUpdatedDocument(activities);
 				Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
-
-				return activities;
 			}
 		}
-
-		return false;
-
 	}
 });
 
@@ -138,6 +123,10 @@ function getHighestRank() {
 		return 0;
 	else
 		var activities = user["activities"];
+
+	// if there are no activities, default rank is 0
+	if (activities.length == 0)
+		return 0;
 
 	var maxRank = activities[0]["rank"];
 	for (var i = 1; i < activities.length; i++) {
