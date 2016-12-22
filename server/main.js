@@ -86,7 +86,7 @@ Meteor.methods({
 	},
 	deleteActivity:function(activityId) {
 		var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
-		var i, j;
+		var i;
 		for (i = 0; i < activities.length; i++) {
 		  if (activities[i]["_id"] === activityId) {
 		    activities.splice(i, 1);

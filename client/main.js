@@ -4,6 +4,14 @@ import './main.html';
 import { Accounts } from 'meteor/accounts-base';
 
 var Activities = new Mongo.Collection("activities");
+
+
+
+
+
+
+
+
  
 Accounts.ui.config({
   passwordSignupFields: 'USERNAME_ONLY',
@@ -76,6 +84,19 @@ Template.mainContent.events({
 });
 
 Template.mainContent.rendered = function() {
+
+	$(".js-task, .activityTitle").attr('size', 10); // initial size of input
+	// a slider for changing input area length
+	$('#input-length-slider').bootstrapSlider({
+		formatter: function(value) {
+			console.log(value);
+
+			$(".js-task, .activityTitle").attr('size', value);
+		},
+		tooltip: 'hide'
+	});
+
+	// jquery sortable allows dragging of activity + tasks by holding down and dragging div container
 	this.$('.allActivities').sortable({
 		stop: function(e, ui) {
 
