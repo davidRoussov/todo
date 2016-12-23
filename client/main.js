@@ -25,10 +25,9 @@ Template.mainContent.helpers({
 		try { 
 			var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
 			activities = activities.sort(compare);
-			Session.set("activities", activities);
+
+			return activities;
 		} catch(err) {}
-	
-		return Session.get("activities");
 	}
 });
 
@@ -89,7 +88,6 @@ Template.mainContent.rendered = function() {
 	// a slider for changing input area length
 	$('#input-length-slider').bootstrapSlider({
 		formatter: function(value) {
-			console.log(value);
 
 			$(".js-task, .activityTitle").attr('size', value);
 		},
