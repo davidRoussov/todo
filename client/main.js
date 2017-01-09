@@ -7,11 +7,6 @@ var Activities = new Mongo.Collection("activities");
 
 
 
-
-
-
-
-
  
 Accounts.ui.config({
   passwordSignupFields: 'USERNAME_ONLY',
@@ -27,7 +22,9 @@ Template.mainContent.helpers({
 			activities = activities.sort(compare);
 
 			return activities;
-		} catch(err) {}
+		} catch(err) {
+			return Session.get("activities");
+		}
 	}
 });
 
@@ -36,14 +33,18 @@ Template.mainContent.events({
 		var button = $(event.currentTarget);
 		var activityId = button.parent().parent().parent().attr("id");
 		
-		Meteor.call("addNewTask", activityId);
+		Meteor.call("addNewTask", activityId, Session.get("activities"), function(error, result) {
+			if (!Meteor.userId()) Session.set("activities", result);
+		});
 	},
 	"click .js-deleteButton":function(event) {
 		var button = $(event.currentTarget);
 		var activityId = button.parent().parent().parent().attr("id");
 		var taskIndex = (button.parent().index()) / 2;
 
-	 	Meteor.call("deleteTask", activityId, taskIndex);
+	 	Meteor.call("deleteTask", activityId, taskIndex, Session.get("activities"), function(error, result) {
+	 		if (!Meteor.userId()) Session.set("activities", result);
+	 	});
 	},
 	"change .js-task":function(event) {
 		var inputField = $(event.target);
@@ -51,14 +52,19 @@ Template.mainContent.events({
 		var activityId = inputField.parent().parent().parent().attr("id");
 		var taskIndex = inputField.parent().index() / 2;
 
-		Meteor.call("modifyTask", newTask, activityId, taskIndex, function() {
+		Meteor.call("modifyTask", newTask, activityId, taskIndex, Session.get("activities"), function(error, result) {
+			if (!Meteor.userId()) Session.set("activities", result);
 			$(event.target).css("color", "black");
 		});
 	},
 	"input .js-task":function(event) {
+		if (!Meteor.userId()) return;
+
 		$(event.target).css("color", "red");
 	},
 	"change .activityTitle":function(event) {
+		if (!Meteor.userId()) return;
+
 		var inputField = $(event.target);
 		var activityId = inputField.parent().parent().attr("id");
 		var newTitle = inputField.val();
@@ -68,16 +74,29 @@ Template.mainContent.events({
 		});
 	},
 	"input .activityTitle":function(event) {
+		if (!Meteor.userId()) return;
+
 		$(event.target).css("color", "red");
 	},
 	"click .js-deleteActivity":function(event) {
 		var button = $(event.currentTarget);
 		var activityId = button.parent().parent().attr("id");
 		
-		Meteor.call("deleteActivity", activityId);
+		Meteor.call("deleteActivity", activityId, Session.get("activities"), function(error, result) {
+			if (!Meteor.userId()) Session.set("activities", result);
+		});
 	},
 	"click .js-addActivityButton":function(event) {
-	  Meteor.call("addNewActivity");
+	  	Meteor.call("addNewActivity", function(error, newActivity) {
+	  		if (!Meteor.userId()) {
+	  			if (typeof Session.get("activities") == 'undefined') {
+	  				Session.set("activities", []);
+	  			}
+		  		var activities = Session.get("activities");
+		  		activities.push(newActivity);
+		  		Session.set("activities", activities);	  			
+	  		}
+	  	});
 	}
 
 });
@@ -97,6 +116,8 @@ Template.mainContent.rendered = function() {
 	// jquery sortable allows dragging of activity + tasks by holding down and dragging div container
 	this.$('.allActivities').sortable({
 		stop: function(e, ui) {
+
+			if (!Meteor.userId()) return;
 
 			el = ui.item.get(0);
 			before = ui.item.prev().get(0);
