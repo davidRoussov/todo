@@ -108,7 +108,8 @@ Template.mainContent.rendered = function() {
 	$('#input-length-slider').bootstrapSlider({
 		formatter: function(value) {
 
-			$(".js-task, .activityTitle").attr('size', value);
+			$(".activityTitle").attr('size', value*1.9);
+			$(".js-task").attr('size', value*2.9);
 		},
 		tooltip: 'hide'
 	});
