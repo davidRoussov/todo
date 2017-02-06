@@ -45,8 +45,11 @@ Template.mainContent.events({
 		var activityId = button.parent().parent().parent().attr("id");
 		var taskIndex = (button.parent().index()) / 2;
 
+		$(".js-deleteButton").prop("disabled", true);
+
 	 	Meteor.call("deleteTask", activityId, taskIndex, Session.get("activities"), function(error, result) {
 	 		if (!Meteor.userId()) Session.set("activities", result);
+	 		$(".js-deleteButton").prop("disabled", false);
 	 	});
 	},
 	"change .js-task":function(event) {
