@@ -32,9 +32,12 @@ Template.mainContent.events({
 	"click .js-addTask":function(event) {
 		var button = $(event.currentTarget);
 		var activityId = button.parent().parent().parent().attr("id");
+
+		button.prop("disabled", true);
 		
 		Meteor.call("addNewTask", activityId, Session.get("activities"), function(error, result) {
 			if (!Meteor.userId()) Session.set("activities", result);
+			button.prop("disabled", false);
 		});
 	},
 	"click .js-deleteButton":function(event) {
