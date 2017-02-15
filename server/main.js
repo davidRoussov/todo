@@ -2,9 +2,13 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';	
 
 var Activities = new Mongo.Collection("activities");
+var Notes = new Mongo.Collection("notes");
 
 Meteor.publish("activities", function() {
 	return Activities.find();
+});
+Meteor.publish("notes", function() {
+	return Notes.find();
 });
 
 Meteor.methods({
@@ -141,6 +145,25 @@ Meteor.methods({
 				Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
 			}
 		}
+	},
+
+
+
+
+	updateQuickNotes:function(newNotes) {
+		if (Notes.findOne({"owner": Meteor.userId()})) {
+			var json = Notes.findOne({"owner": Meteor.userId()});
+			json.notes = newNotes
+			Notes.update({_id:Notes.findOne({"owner": Meteor.userId()})["_id"]}, json);	
+		} else {
+			var json = {
+				"owner": Meteor.userId(),
+				"username": Meteor.user().username,
+				"notes": newNotes
+			}
+			Notes.insert(json);
+		}
+		
 	}
 });
 

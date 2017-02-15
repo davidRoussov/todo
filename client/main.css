@@ -1,5 +1,12 @@
+html {
+	width: 100%;
+	height: 100%;
+}
+
 body {
 	background-color: #fff2e6;
+	width: 100%;
+	height: 100%;
 }
 
 /* ############################################################### */
@@ -8,6 +15,21 @@ body {
 .navbar {
 	margin-bottom: 0px;
 	min-height: 25px;
+}
+
+.td-submenu-nav {
+	min-height: 22px !important;
+}
+
+.td-container-fluid {
+	padding-left: 0 !important;
+}
+
+.td-submenu-button {
+	border-radius: 0 !important;
+	margin: 0 auto !important;
+	outline: none !important;
+
 }
 
 
@@ -47,8 +69,11 @@ body {
 	padding-top: 20px;
 
 }
-
-
+.td-slider {
+	position: fixed;
+	bottom: 20px;
+	right: 40px;
+}
 
 
 
@@ -64,32 +89,26 @@ body {
 /* ############################################################### */
 /* ############################################################### */
 /* mainContent */
-.allActivities {
+/*.allActivities {
 	display: inline-block;
 	padding-left: 20px;
-	padding-top: 20px;
+
 }
 .activity {
 	display: inline-block;
-	padding: 20px;
+
 	font-size: 14px;
-/*	width: 250px;*/
-}
-.activity-content {
-	width: 75% !important;
+	background-color: lightblue;
+	margin: 10px;
 }
 .activityTitle {
 	background-color: transparent;
     border: none;
     font-size: 20px;
+    overflow: auto;
 }
 .activityTitle:focus {outline: 0;}
-ul {
-	/*position: absolute;*/
-	padding: 0;
-	display: table-cell;
-}
-ul:focus {outline: 0;}
+
 
 .js-addTask {
 	border: none;
@@ -105,18 +124,15 @@ ul:focus {outline: 0;}
 .btn-danger {
 	min-width: 120px;
 }
-/*input {
-	width: 100% !important;
 
-}*/
 input:focus {outline: none;}
 
-.js-deleteButton, .js-deleteActivity, .js-addActivityButton {
-	display: inline;
+.js-deleteButton, .js-deleteActivity {
 	border: none;
 	background-color: transparent;
+	float: left;
 }
-.js-deleteButton:hover, .js-deleteButton:focus, .js-deleteActivity:hover, .js-deleteActivity:focus, .js-addActivityButton:hover, .js-addActivityButton:focus {
+.js-deleteButton:hover, .js-deleteButton:focus, .js-deleteActivity:hover, .js-deleteActivity:focus {
 	border-color: transparent !important;
 	outline: 0 !important;
 	background-color: transparent !important;
@@ -125,33 +141,82 @@ input:focus {outline: none;}
 
 .input-group {
 	display: inline-flex;
+	width: 100% !important;
 }
 
 .js-task {
 	background-color: transparent;
     border: none;
+    overflow: auto;
+    width: 100%;
 }
 .js-task:focus {outline: 0;}
 
+
 .js-addActivityButton {
-	display: inline-block;
-	padding: 15px;
+	margin-left: 5px;
+	margin-top: 5px;
+}*/
+
+.all-activities {
+
+}
+
+.activity {
+	padding: 10px;
+/*	background-color: lightblue;*/
+	margin-left: 20px;
+}
+/*.activity-content {
+	list-style-type: none;
+	padding: 0px;
+}*/
+
+.td-row {
+	display: inline-flex;
+}
+
+.activity-button {
+	border: none;
 	background-color: transparent;
+
 }
-.js-addActivityButton:active {
+.activity-button:hover, .activity-button:focus {
+	border-color: transparent !important;
+	outline: 0 !important;
 	background-color: transparent !important;
-	box-shadow: none !important;
-}
-.btn-xlg {
-	padding: 18px 28px;
-	font-size: 28px;
-	line-height: normal;
-	-webkit-border-radius: 8px;
-	-moz-border-radius: 8px;
-	border-radius: 8px;
+	box-shadow: none !important;	
 }
 
-.js-addActivity {
-	display: inline-block;
+.input-field {
+	background-color: transparent;
+	border: none;
+	outline: none;
+
 }
 
+.activityTitle {
+	font-size: 20px;
+}
+
+
+
+
+/* ############################################################### */
+/* ############################################################### */
+/* quick notes */
+.notes-panel {
+	width: 100%;
+	height: 100%;
+}
+
+.quick-notes-textarea {
+	width: 100%;
+	height: 100%;
+	background-color: transparent;
+	padding: 40px;
+	font-size: 22px;
+	font-family: "Helvetica";
+	outline: none;
+	border: none;
+}

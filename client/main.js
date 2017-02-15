@@ -4,6 +4,28 @@ import './main.html';
 import { Accounts } from 'meteor/accounts-base';
 
 var Activities = new Mongo.Collection("activities");
+var Notes = new Mongo.Collection("notes");
+Meteor.subscribe("activities");
+Meteor.subscribe("notes");
+
+
+
+Router.route('/', function () {
+  this.redirect('/lists');
+});
+Router.route('/lists', function () {
+  this.render('mainContent');
+});
+
+Router.route('/notes', function () {
+  this.render('notes');
+});
+
+
+
+
+
+
 
 
 
@@ -12,7 +34,7 @@ Accounts.ui.config({
   passwordSignupFields: 'USERNAME_ONLY',
 });
 
-Meteor.subscribe("activities");
+
 
 Template.mainContent.helpers({
 	activities:function() {
@@ -25,11 +47,65 @@ Template.mainContent.helpers({
 		} catch(err) {
 			return Session.get("activities");
 		}
+	},
+	windowWidth:function() {
+		return window.innerWidth;
 	}
 });
 
+Template.notes.helpers({
+	notes:function() {
+		var user = Notes.findOne({"owner": Meteor.userId()});
+		if (user) {
+			return user.notes;
+		} else {
+			return "";
+		}
+
+	}
+});
+
+Template.registerHelper('currentRouteIs', function (route) { 
+	if (Router.current())	
+		return Router.current().route.getName() === route; 
+	else
+		return false;
+});
+
+
+
+Template.topPanel.events({
+
+	"click .js-save-quick-notes":function(event) {
+		var newNotes = $(".quick-notes-textarea").val();
+		Meteor.call("updateQuickNotes", newNotes, function() {
+			console.log("done");
+		});
+	},
+
+	"click .js-addActivityButton":function(event) {
+	  	Meteor.call("addNewActivity", function(error, newActivity) {
+	  		if (!Meteor.userId()) {
+	  			if (typeof Session.get("activities") == 'undefined') {
+	  				Session.set("activities", []);
+	  			}
+		  		var activities = Session.get("activities");
+		  		activities.push(newActivity);
+		  		Session.set("activities", activities);	  			
+	  		}
+	  	});
+	}
+
+
+});
+
+
+
+
+
 Template.mainContent.events({
 	"click .js-addTask":function(event) {
+		console.log("hi");
 		var button = $(event.currentTarget);
 		var activityId = button.parent().parent().parent().attr("id");
 
@@ -91,37 +167,74 @@ Template.mainContent.events({
 		Meteor.call("deleteActivity", activityId, Session.get("activities"), function(error, result) {
 			if (!Meteor.userId()) Session.set("activities", result);
 		});
-	},
-	"click .js-addActivityButton":function(event) {
-	  	Meteor.call("addNewActivity", function(error, newActivity) {
-	  		if (!Meteor.userId()) {
-	  			if (typeof Session.get("activities") == 'undefined') {
-	  				Session.set("activities", []);
-	  			}
-		  		var activities = Session.get("activities");
-		  		activities.push(newActivity);
-		  		Session.set("activities", activities);	  			
-	  		}
-	  	});
 	}
 
 });
 
+
+Template.activity.rendered = function() {
+	$('.grid').masonry({
+		itemSelector: '.grid-item'
+	});
+
+	$(".grid-item").css("width", 400);
+	$(".input-field").css("width", 368);
+}
+
+
+
 Template.mainContent.rendered = function() {
 
-	$(".js-task, .activityTitle").attr('size', 10); // initial size of input
+
+	// // hack solution, need to investifate
+	// setInterval(function() {
+
+	// 	if ($(".grid-item").length > 0) {
+
+	// 		$('.grid').masonry({
+	// 			itemSelector: '.grid-item'
+	// 		});
+
+	// 		$(".grid-item").css("width", 400);
+	// 		$(".input-field").css("width", 368);
+
+	// 		clearInterval();
+	// 	}
+
+	// }, 200);
+
+
+
 	// a slider for changing input area length
 	$('#input-length-slider').bootstrapSlider({
 		formatter: function(value) {
+			$(".grid-item").css("width", value - 80);
+			$(".input-field").css('width', value - 48);
 
-			$(".activityTitle").attr('size', value*1.9);
-			$(".js-task").attr('size', value*2.9);
+
+			if ($(".grid-item").length > 0) {
+				$('.grid').masonry({
+				  // options
+				  itemSelector: '.grid-item'
+				});
+			}
+
+
+
 		},
 		tooltip: 'hide'
 	});
 
 	// jquery sortable allows dragging of activity + tasks by holding down and dragging div container
-	this.$('.allActivities').sortable({
+	this.$('.all-activities').sortable({
+        start:  function(event, ui) {            
+                 console.log(ui); 
+            ui.item.removeClass('masonry');
+            ui.item.parent().masonry('reloadItems')
+                },
+        change: function(event, ui) {
+            ui.item.parent().masonry('reloadItems');
+                },
 		stop: function(e, ui) {
 
 			if (!Meteor.userId()) return;
@@ -130,6 +243,11 @@ Template.mainContent.rendered = function() {
 			before = ui.item.prev().get(0);
 			after = ui.item.next().get(0);
 
+			console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+			console.log(el);
+			console.log(before);
+			console.log(after);
+
 			if (!before) {
 				newRank = Blaze.getData(after).rank - 1;
 			} else if (!after) {
@@ -137,13 +255,23 @@ Template.mainContent.rendered = function() {
 			} else if (before.className === "activity" && after.className === "activity") {
 	        	newRank = (Blaze.getData(after).rank + Blaze.getData(before).rank)/2;				
 			}
+			console.log(newRank);
 
 			if (newRank) {
 				Meteor.call("updateActivityRank", Blaze.getData(el)._id, newRank);
+
+				ui.item.addClass('masonry');
+            ui.item.parent().masonry('reloadItems');
 			}
 		}
 	});
+
+
+
+
 };
+
+
 
 function compare(a,b) {
 	if (a.rank < b.rank)

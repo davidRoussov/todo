@@ -6,79 +6,230 @@
 
   {{> topPanel}}
 
-  <div class="main-content"> 
-    {{> mainContent}}
-  </div>
+
+
 
 </body>
 
 <template name="topPanel">
 
   <div class="top-panel">
-    <nav class="navbar navbar-default">
+
+    <nav class="navbar navbar-static-top navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
-          {{> loginButtons}}
+          <a class="navbar-brand" href="/">Todo</a>
         </div>
+        <ul class="nav navbar-nav">
+          <li class="{{#if currentRouteIs 'lists'}}active{{/if}}"><a href="/lists">Lists</a></li>
+          <li class="{{#if currentRouteIs 'notes'}}active{{/if}}"><a href="/notes">Quick notes</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          {{> loginButtons}}
+        </ul>
       </div>
     </nav>
+
+
+
+    {{#if currentRouteIs 'lists'}}
+    <nav class="td-submenu-nav navbar navbar-static-top navbar-default">
+      <div class="td-container-fluid container-fluid">
+        <ul class="nav navbar-nav">
+           <button type="button" class="td-submenu-button btn btn-primary navbar-btn btn-xs js-addActivityButton">Add activity</button>
+        </ul>
+      </div>
+    </nav>
+    {{else}}
+    {{#if currentRouteIs 'notes'}}
+    <nav class="td-submenu-nav navbar navbar-static-top navbar-default">
+      <div class="td-container-fluid container-fluid">
+        <ul class="nav navbar-nav">
+          <button type="button" class="td-submenu-button btn btn-success navbar-btn btn-xs js-save-quick-notes">Save</button>
+        </ul>
+      </div>
+    </nav>
+    {{/if}}
+    {{/if}}
+
   </div>
 
 </template>
 
 <template name="mainContent">
 
-  <div class="input-length-slider-container">
-    <input id="input-length-slider" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="70" data-slider-step="1" data-slider-value="10"/>
-  </div>
 
-  <div class="allActivities">
+<!--   <div class="allActivities">
+
     {{#each activities}}
     <div class="activity" id={{_id}}>
 
-      <!--a small delete button together with an input that contains the activity name-->
-      <div class="input-group activity-content">
-        <button type="button" class="btn btn-default btn-xs js-deleteActivity">
-        <span class="glyphicon glyphicon-remove"></span>
-        </button>
-        <input data-tooltip={{title}} type="text" class="activityTitle" value={{title}} ><br>
-      </div>
 
-      <ul class="list-group activity-content">
-      {{#each tasks}} 
+        <div>
 
-        <!--a small delete button together with an input that contains a task-->
-        <div class="input-group">
-          <button type="button" class="btn btn-default btn-xs js-deleteButton" id={{_id}}>
-        <span class="glyphicon glyphicon-remove"></span>
-          </button>
-          <input data-tooltip={{task}} class="js-task" value={{task}}>
+          <div>
+
+            <button type="button" class="btn btn-default btn-xs js-deleteActivity">
+            <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            <input data-tooltip={{title}} type="text" class="activityTitle" value={{title}} >
+
+          </div>
+
+          {{#each tasks}}
+          <div>
+
+            <button type="button" class="btn btn-default btn-xs js-deleteButton" id={{_id}}>
+            <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            <input data-tooltip={{task}} class="js-task" value={{task}}>
+
+          </div>
+          {{/each}}
+
+          <div>
+
+            <button type="button" class="btn btn-default btn-xs js-addTask">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+
+          </div>
+
+
         </div>
-        <br>
 
-      {{/each}}
 
-        <!--little plus button for adding a new task to an activity-->
-        <li style="list-style-type: none;">     
-          <button type="button" class="btn btn-default btn-xs js-addTask">
-            <span class="glyphicon glyphicon-plus"></span>
-          </button>
-        </li>
-
-      </ul>
     </div>
+    {{/each}}
+
+  </div> -->
+
+
+
+
+
+<!--   <div class="grid all-activities">
+
+    {{#each activities}}
+    <div class="grid-item activity" id={{_id}}>
+
+        <ul class="activity-content">
+
+          <li class="td-row">
+            <button type="button" class="btn btn-default btn-xs activity-button js-deleteActivity">
+            <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            <input data-tooltip={{title}} type="text" class="activityTitle input-field" value={{title}} >
+          </li>
+
+          {{#each tasks}}
+          <li class="td-row">
+            <button type="button" class="btn btn-default btn-xs activity-button js-deleteButton" id={{_id}}>
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            <input data-tooltip={{task}} class="js-task input-field" value={{task}}>
+          </li>
+          {{/each}}
+
+          <li class="td-row">
+            <button type="button" class="btn btn-default btn-xs activity-button js-addTask">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+          </li>
+
+        </ul>
+
+    </div>
+    {{/each}}
+
+  </div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="grid all-activities">
+
+    {{#each activities}}
+
+
+
+    {{> activity}}
+
+
     {{/each}}
 
   </div>
 
-  <!-- large plus button at end of all activities to add a new activity-->
-  <div class="js-addActivity">
-    <button type="button" class="btn btn-default btn-xlg js-addActivityButton">
-        <span class="glyphicon glyphicon-plus"></span>
-    </button>
-  </div>
+
+
+
+
+
+
 
 
   {{> tooltips}}
 
+  <div class="td-slider input-length-slider-container">
+    <input id="input-length-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max={{windowWidth}} data-slider-step="1" data-slider-value="400"/>
+  </div>
+
+
+
+</template>
+
+
+
+<template name="notes">
+
+  <div class="notes-panel">
+
+    <textarea class="quick-notes-textarea" placeholder="type here">{{notes}}</textarea>
+
+  </div>
+
+
+</template>
+
+<template name="activity">
+    <div class="grid-item activity" id={{_id}}>
+
+
+        <div class="td-row">
+          <button type="button" class="btn btn-default btn-xs activity-button js-deleteActivity">
+          <span class="glyphicon glyphicon-remove"></span>
+          </button>
+          <input data-tooltip={{title}} type="text" class="activityTitle input-field" value={{title}} >
+        </div>
+        <br>
+
+        {{#each tasks}}
+        <div class="td-row">
+          <button type="button" class="btn btn-default btn-xs activity-button js-deleteButton" id={{_id}}>
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+          <input data-tooltip={{task}} class="js-task input-field" value={{task}}>
+        </div>
+        <br>
+        {{/each}}
+
+        <div class="td-row">
+          <button type="button" class="btn btn-default btn-xs activity-button js-addTask">
+            <span class="glyphicon glyphicon-plus"></span>
+          </button>
+        </div>
+
+
+    </div>
 </template>
