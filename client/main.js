@@ -79,12 +79,13 @@ Template.topPanel.events({
 	"click .js-save-quick-notes":function(event) {
 		var newNotes = $(".quick-notes-textarea").val();
 		Meteor.call("updateQuickNotes", newNotes, function() {
-			console.log("done");
+			$(".unsaved-notes-star").css("display", "none");
 		});
 	},
 
 	"click .js-addActivityButton":function(event) {
 	  	Meteor.call("addNewActivity", function(error, newActivity) {
+
 	  		if (!Meteor.userId()) {
 	  			if (typeof Session.get("activities") == 'undefined') {
 	  				Session.set("activities", []);
@@ -93,9 +94,18 @@ Template.topPanel.events({
 		  		activities.push(newActivity);
 		  		Session.set("activities", activities);	  			
 	  		}
+
 	  	});
 	}
 
+
+});
+
+Template.notes.events({
+
+	"keyup .quick-notes-textarea":function(event) {
+		$(".unsaved-notes-star").css("display", "inline");
+	}
 
 });
 
@@ -105,9 +115,8 @@ Template.topPanel.events({
 
 Template.mainContent.events({
 	"click .js-addTask":function(event) {
-		console.log("hi");
 		var button = $(event.currentTarget);
-		var activityId = button.parent().parent().parent().attr("id");
+		var activityId = button.parent().parent().attr("id");
 
 		button.prop("disabled", true);
 		
@@ -118,8 +127,8 @@ Template.mainContent.events({
 	},
 	"click .js-deleteButton":function(event) {
 		var button = $(event.currentTarget);
-		var activityId = button.parent().parent().parent().attr("id");
-		var taskIndex = (button.parent().index()) / 2;
+		var activityId = button.parent().parent().attr("id");
+		var taskIndex = (button.parent().index()) / 2 - 1;
 
 		$(".js-deleteButton").prop("disabled", true);
 
@@ -173,43 +182,24 @@ Template.mainContent.events({
 
 
 Template.activity.rendered = function() {
-	$('.grid').masonry({
-		itemSelector: '.grid-item'
-	});
 
-	$(".grid-item").css("width", 400);
-	$(".input-field").css("width", 368);
-}
+	rerenderMasonry();
+
+};
 
 
 
 Template.mainContent.rendered = function() {
 
-
-	// // hack solution, need to investifate
-	// setInterval(function() {
-
-	// 	if ($(".grid-item").length > 0) {
-
-	// 		$('.grid').masonry({
-	// 			itemSelector: '.grid-item'
-	// 		});
-
-	// 		$(".grid-item").css("width", 400);
-	// 		$(".input-field").css("width", 368);
-
-	// 		clearInterval();
-	// 	}
-
-	// }, 200);
-
+	$(".grid-item").css("width", 400);
+	$(".input-field").css("width", 368);
 
 
 	// a slider for changing input area length
 	$('#input-length-slider').bootstrapSlider({
 		formatter: function(value) {
-			$(".grid-item").css("width", value - 80);
-			$(".input-field").css('width', value - 48);
+			$(".grid-item").css("width", value - 48);
+			$(".input-field").css('width', value - 80);
 
 
 			if ($(".grid-item").length > 0) {
@@ -225,46 +215,40 @@ Template.mainContent.rendered = function() {
 		tooltip: 'hide'
 	});
 
-	// jquery sortable allows dragging of activity + tasks by holding down and dragging div container
-	this.$('.all-activities').sortable({
-        start:  function(event, ui) {            
-                 console.log(ui); 
-            ui.item.removeClass('masonry');
-            ui.item.parent().masonry('reloadItems')
-                },
-        change: function(event, ui) {
-            ui.item.parent().masonry('reloadItems');
-                },
-		stop: function(e, ui) {
+	// // jquery sortable allows dragging of activity + tasks by holding down and dragging div container
+	// this.$('.all-activities').sortable({
+ //        start:  function(event, ui) {            
+ //            ui.item.removeClass('masonry');
+ //            ui.item.parent().masonry('reloadItems')
+ //                },
+ //        change: function(event, ui) {
+ //            ui.item.parent().masonry('reloadItems');
+ //                },
+	// 	stop: function(e, ui) {
 
-			if (!Meteor.userId()) return;
+	// 		if (!Meteor.userId()) return;
 
-			el = ui.item.get(0);
-			before = ui.item.prev().get(0);
-			after = ui.item.next().get(0);
+	// 		el = ui.item.get(0);
+	// 		before = ui.item.prev().get(0);
+	// 		after = ui.item.next().get(0);
 
-			console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-			console.log(el);
-			console.log(before);
-			console.log(after);
 
-			if (!before) {
-				newRank = Blaze.getData(after).rank - 1;
-			} else if (!after) {
-				newRank = Blaze.getData(before).rank + 1;
-			} else if (before.className === "activity" && after.className === "activity") {
-	        	newRank = (Blaze.getData(after).rank + Blaze.getData(before).rank)/2;				
-			}
-			console.log(newRank);
+	// 		if (!before) {
+	// 			newRank = Blaze.getData(after).rank - 1;
+	// 		} else if (!after) {
+	// 			newRank = Blaze.getData(before).rank + 1;
+	// 		} else if (before.className === "activity" && after.className === "activity") {
+	//         	newRank = (Blaze.getData(after).rank + Blaze.getData(before).rank)/2;				
+	// 		}
 
-			if (newRank) {
-				Meteor.call("updateActivityRank", Blaze.getData(el)._id, newRank);
+	// 		if (newRank) {
+	// 			Meteor.call("updateActivityRank", Blaze.getData(el)._id, newRank);
 
-				ui.item.addClass('masonry');
-            ui.item.parent().masonry('reloadItems');
-			}
-		}
-	});
+	// 			ui.item.addClass('masonry');
+ //            ui.item.parent().masonry('reloadItems');
+	// 		}
+	// 	}
+	// });
 
 
 
@@ -279,4 +263,13 @@ function compare(a,b) {
 	if (a.rank > b.rank)
 		return 1;
 	return 0;
+}
+
+function rerenderMasonry() {
+
+	$('.grid').masonry({}).masonry("destroy");
+
+	$('.grid').masonry({
+		itemSelector: '.grid-item'
+	});
 }

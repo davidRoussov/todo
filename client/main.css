@@ -19,6 +19,7 @@ body {
 
 .td-submenu-nav {
 	min-height: 22px !important;
+	background-color: #383838 ;
 }
 
 .td-container-fluid {
@@ -219,4 +220,16 @@ input:focus {outline: none;}
 	font-family: "Helvetica";
 	outline: none;
 	border: none;
+}
+
+.unsaved-notes-star {
+	color: red;
+	background-color: transparent !important;
+	outline: none !important;
+	border: none !important;
+	padding: 0px !important;
+	display: none;
+}
+.unsaved-notes-star:hover, .unsaved-notes-star:active:focus, .unsaved-notes-star:active, .unsaved-notes-star:focus {
+	color: red !important;
 }
