@@ -90,88 +90,14 @@ body {
 /* ############################################################### */
 /* ############################################################### */
 /* mainContent */
-/*.allActivities {
-	display: inline-block;
-	padding-left: 20px;
-
-}
-.activity {
-	display: inline-block;
-
-	font-size: 14px;
-	background-color: lightblue;
-	margin: 10px;
-}
-.activityTitle {
-	background-color: transparent;
-    border: none;
-    font-size: 20px;
-    overflow: auto;
-}
-.activityTitle:focus {outline: 0;}
-
-
-.js-addTask {
-	border: none;
-	background-color: transparent;
-}
-.js-addTask:hover, .js-addTask:focus, .js-addTask:active {
-	background-color: transparent !important;
-	box-shadow: none !important;
-	border-color: transparent !important;
-	outline: 0 !important;
-}
-
-.btn-danger {
-	min-width: 120px;
-}
-
-input:focus {outline: none;}
-
-.js-deleteButton, .js-deleteActivity {
-	border: none;
-	background-color: transparent;
-	float: left;
-}
-.js-deleteButton:hover, .js-deleteButton:focus, .js-deleteActivity:hover, .js-deleteActivity:focus {
-	border-color: transparent !important;
-	outline: 0 !important;
-	background-color: transparent !important;
-	box-shadow: none !important;
-}
-
-.input-group {
-	display: inline-flex;
-	width: 100% !important;
-}
-
-.js-task {
-	background-color: transparent;
-    border: none;
-    overflow: auto;
-    width: 100%;
-}
-.js-task:focus {outline: 0;}
-
-
-.js-addActivityButton {
-	margin-left: 5px;
-	margin-top: 5px;
-}*/
-
 .all-activities {
 
 }
 
 .activity {
 	padding: 10px;
-/*	background-color: lightblue;*/
 	margin-left: 20px;
 }
-/*.activity-content {
-	list-style-type: none;
-	padding: 0px;
-}*/
 
 .td-row {
 	display: inline-flex;

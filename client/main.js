@@ -140,8 +140,8 @@ Template.mainContent.events({
 	"change .js-task":function(event) {
 		var inputField = $(event.target);
 		var newTask = inputField.val();
-		var activityId = inputField.parent().parent().parent().attr("id");
-		var taskIndex = inputField.parent().index() / 2;
+		var activityId = inputField.parent().parent().attr("id");
+		var taskIndex = inputField.parent().index() / 2 - 1;
 
 		Meteor.call("modifyTask", newTask, activityId, taskIndex, Session.get("activities"), function(error, result) {
 			if (!Meteor.userId()) Session.set("activities", result);
