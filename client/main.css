@@ -130,13 +130,12 @@ body {
 	background-color: #f9e5e5;
 }
 
-.td-glyph {
-	float: left;
-/*	display: inline-block;*/
+.td-title {
+	font-size: 14px !important;
 }
 
 .td-content {
-	clear: both;
+	font-size: 12px !important;
 }
 
 

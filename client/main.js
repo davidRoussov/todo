@@ -11,20 +11,15 @@ Meteor.subscribe("notes");
 
 
 Router.route('/', function () {
-  this.redirect('/lists');
+  this.redirect('/todo');
 });
-Router.route('/lists', function () {
+Router.route('/todo', function () {
   this.render('mainContent');
 });
 
 Router.route('/notes', function () {
   this.render('notes');
 });
-
-
-
-
-
 
 
 
@@ -205,7 +200,7 @@ Template.mainContent.events({
 	},
 	"click .js-deleteActivity":function(event) {
 		var button = $(event.currentTarget);
-		var activityId = button.parent().attr("id");
+		var activityId = button.parent().parent().attr("id");
 		
 		Meteor.call("deleteActivity", activityId, Session.get("activities"), function(error, result) {
 			if (!Meteor.userId()) Session.set("activities", result);
@@ -240,15 +235,11 @@ Template.mainContent.rendered = function() {
 	$(".note-textarea").autosize();
 
 	$(".activity").css("width", 400);
-	$(".input-field").css("width", 368);
-
 
 	// a slider for changing input area length
 	$('#input-length-slider').bootstrapSlider({
 		formatter: function(value) {
 			$(".activity").css("width", value - 48);
-			$(".input-field").css('width', value - 80);
-
 
 			if ($(".grid-item").length > 0) {
 				$('.grid').masonry({
@@ -256,8 +247,6 @@ Template.mainContent.rendered = function() {
 				  itemSelector: '.grid-item'
 				});
 			}
-
-
 
 		},
 		tooltip: 'hide'

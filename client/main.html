@@ -16,15 +16,19 @@
       <div class="container-fluid">
 
         <div class="navbar-header">
-          <a class="navbar-brand" href="/">Todo</a>
+          <a class="navbar-brand" href="/">Activities</a>
         </div>
 
         <ul class="nav navbar-nav">
-          <li class="{{#if currentRouteIs 'lists'}}active{{/if}}"><a href="/lists">Lists</a></li>
+          <li class="{{#if currentRouteIs 'todo'}}active{{/if}}"><a href="/todo">To-do</a></li>
+          <li class="{{#if currentRouteIs 'appointments'}}active{{/if}}"><a href="/appointments">Appointments</a></li>
           <li class="{{#if currentRouteIs 'notes'}}active{{/if}}"><a href="/notes">Quick notes</a></li>
+          <li class="{{#if currentRouteIs 'podcasts'}}active{{/if}}"><a href="/podcasts">Podcasts</a></li>
+          <li class="{{#if currentRouteIs 'audiobooks'}}active{{/if}}"><a href="/audiobooks">Audiobooks</a></li>
+          <li class="{{#if currentRouteIs 'Books'}}active{{/if}}"><a href="/Books">Books</a></li>
         </ul>
         
-        {{#if currentRouteIs 'lists'}} 
+        {{#if currentRouteIs 'todo'}} 
         <button type="button" class="td-submenu-button btn btn-primary navbar-btn btn-xs js-addActivityButton">Add activity</button>
         {{/if}}
         {{#if currentRouteIs 'notes'}} 
@@ -42,84 +46,6 @@
   </div>
 
 </template>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <template name="mainContent">
-
-    <div class="grid all-activities">
-
-      {{#each activities}}
-
-        {{> activity}}
-
-      {{/each}}
-
-    </div>
-
-  {{> tooltips}}
-
-  <div class="td-slider input-length-slider-container">
-    <input id="input-length-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max={{windowWidth}} data-slider-step="1" data-slider-value="400"/>
-  </div>
-
-
-</template>
-
-<template name="activity">
-    <div class="grid-item activity" id={{_id}}>
-
-
-        <div class="td-row">
-          <button type="button" class="btn btn-default btn-xs activity-button js-deleteActivity">
-          <span class="glyphicon glyphicon-remove"></span>
-          </button>
-          <input data-tooltip={{title}} type="text" class="activityTitle input-field" value={{title}} >
-        </div>
-        <br>
-
-        {{#each tasks}}
-
-          {{> task}}
-
-        {{/each}}
-
-
-
-        <div class="td-row">
-          <button type="button" class="btn btn-default btn-xs activity-button js-addTask">
-            <span class="glyphicon glyphicon-plus"></span>
-          </button>
-        </div>
-
-
-    </div>
-</template>
-
-<template name="task">
-
-    <div class="td-row">
-      <button type="button" class="btn btn-default btn-xs activity-button js-deleteButton" id={{_id}}>
-        <span class="glyphicon glyphicon-remove"></span>
-      </button>
-      <input data-tooltip={{task}} class="js-task input-field" value={{task}}>
-    </div>
-    <br>
-
-</template> -->
-
-
 
 <template name="mainContent">
 
@@ -143,11 +69,12 @@
 <template name="activity">
   <div class="grid-item activity" id={{_id}}>
 
-
-    <button type="button" class="btn btn-default btn-xs glyph-button js-deleteActivity">
-      <span class="glyphicon glyphicon-remove"></span>
-    </button>
-    <textarea rows="1" class="note-textarea note-title js-activityTitle" placeholder="Title" >{{title}}</textarea>
+    <div class="td-row" style="border-top: none;">
+      <button type="button" class="btn btn-default btn-xs glyph-button js-deleteActivity">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
+      <textarea rows="1" class="note-textarea note-title td-title js-activityTitle" placeholder="Title" >{{title}}</textarea>
+    </div>
 
 
 
@@ -185,12 +112,6 @@
     <br>
 
 </template>
-
-
-
-
-
-
 
 
 
