@@ -16,6 +16,7 @@ caching-html-compiler@1.0.7
 callback-hook@1.0.10
 check@1.2.4
 coffeescript@1.0.17
+copleykj:jquery-autosize@1.17.8
 ddp@1.2.5
 ddp-client@1.2.9
 ddp-common@1.2.8

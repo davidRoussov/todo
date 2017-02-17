@@ -88,7 +88,7 @@ Meteor.methods({
 	addNewActivity:function() {
 		var userExistence = Activities.findOne({"owner": Meteor.userId()});
 
-		var highestRank = getHighestRank();
+		var highestRank = getHighestRank("activities");
 
 		var json = {"title": "", "tasks": [], "rank": highestRank+1, _id: Random.id()};
 
@@ -150,21 +150,67 @@ Meteor.methods({
 
 
 
-	updateQuickNotes:function(newNotes) {
+
+
+
+
+
+
+	createNewNote:function() {
+		var emptyNote = {
+			_id: Random.id(),
+			topicName: "",
+			notes: "",
+			rank: getHighestRank("notes") + 1
+		};
 		if (Notes.findOne({"owner": Meteor.userId()})) {
 			var json = Notes.findOne({"owner": Meteor.userId()});
-			json.notes = newNotes
+			json.notes.push(emptyNote);
 			Notes.update({_id:Notes.findOne({"owner": Meteor.userId()})["_id"]}, json);	
 		} else {
 			var json = {
 				"owner": Meteor.userId(),
 				"username": Meteor.user().username,
-				"notes": newNotes
+				"notes": [emptyNote]
 			}
 			Notes.insert(json);
+		}		
+	},
+	updateNoteTitle:function(topicID, newText) {
+		var user = Notes.findOne({"owner": Meteor.userId()});
+		var notes = user.notes;
+		for (var i = 0; i < notes.length; i++) {
+			if (notes[i]._id == topicID) {
+				notes[i].topicName = newText;
+			}
 		}
-		
+
+		Notes.update({_id:Notes.findOne({"owner": Meteor.userId()})["_id"]}, user);	
+	},
+	updateNoteContent:function(topicID, newText) {
+		var user = Notes.findOne({"owner": Meteor.userId()});
+		var notes = user.notes;
+		for (var i = 0; i < notes.length; i++) {
+			if (notes[i]._id == topicID) {
+				notes[i].notes = newText;
+			}
+		}
+
+		Notes.update({_id:Notes.findOne({"owner": Meteor.userId()})["_id"]}, user);	
+	},
+	deleteNote:function(topicID) {
+		var user = Notes.findOne({"owner": Meteor.userId()});
+		var notes = user.notes;
+		for (var i = 0; i < notes.length; i++) {
+			if (notes[i]._id == topicID) {
+				notes.splice(i,1);
+			}
+		}
+
+		Notes.update({_id:Notes.findOne({"owner": Meteor.userId()})["_id"]}, user);	
 	}
+
+
 });
 
 function createUpdatedDocument(activities) {
@@ -175,21 +221,29 @@ function createUpdatedDocument(activities) {
 	};
 }
 
-function getHighestRank() {
-	var user = Activities.findOne({"owner": Meteor.userId()});
-	if (user == null)
-		return 0;
-	else
-		var activities = user["activities"];
+function getHighestRank(mode) {
+	var user, objarr;
+	if (mode == "activities") {
+		user = Activities.findOne({"owner": Meteor.userId()});
+		if (user == null)
+			return 0;
+		else
+			objarr = user["activities"];
+	} else if (mode == "notes") {
+		user = Notes.findOne({"owner": Meteor.userId()});
+		if (user == null)
+			return 0;
+		else
+			objarr = user["notes"];
+	} 
 
-	// if there are no activities, default rank is 0
-	if (activities.length == 0)
+	if (objarr.length == 0)
 		return 0;
 
-	var maxRank = activities[0]["rank"];
-	for (var i = 1; i < activities.length; i++) {
-		if (activities[i]["rank"] > maxRank) {
-			maxRank = activities[i]["rank"];
+	var maxRank = objarr[0]["rank"];
+	for (var i = 1; i < objarr.length; i++) {
+		if (objarr[i]["rank"] > maxRank) {
+			maxRank = objarr[i]["rank"];
 		}
 	}
 
