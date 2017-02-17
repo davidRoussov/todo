@@ -15,51 +15,36 @@
 
   <div class="top-panel">
 
-    <nav class="navbar navbar-static-top navbar-inverse">
+    <nav class="td-main-menu-bar navbar navbar-static-top navbar-inverse">
       <div class="container-fluid">
+
         <div class="navbar-header">
           <a class="navbar-brand" href="/">Todo</a>
         </div>
+
         <ul class="nav navbar-nav">
           <li class="{{#if currentRouteIs 'lists'}}active{{/if}}"><a href="/lists">Lists</a></li>
           <li class="{{#if currentRouteIs 'notes'}}active{{/if}}"><a href="/notes">Quick notes</a></li>
         </ul>
+        
+        {{#if currentRouteIs 'lists'}} 
+        <button type="button" class="td-submenu-button btn btn-primary navbar-btn btn-xs js-addActivityButton">Add activity</button>
+        {{/if}}
+        {{#if currentRouteIs 'notes'}} 
+          <button type="button" class="td-submenu-button btn btn-success navbar-btn btn-xs js-save-quick-notes">Save</button>
+
+          <button type="button" class="unsaved-notes-star btn btn-default btn-xs">
+            <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+          </button>
+        {{/if}}        
+
+
         <ul class="nav navbar-nav navbar-right">
           {{> loginButtons}}
         </ul>
       </div>
     </nav>
-
-
-
-    {{#if currentRouteIs 'lists'}}
-    <nav class="td-submenu-nav navbar navbar-static-top navbar-default">
-      <div class="td-container-fluid container-fluid">
-        <ul class="nav navbar-nav">
-           <button type="button" class="td-submenu-button btn btn-primary navbar-btn btn-xs js-addActivityButton">Add activity</button>
-        </ul>
-      </div>
-    </nav>
-    {{else}}
-    {{#if currentRouteIs 'notes'}}
-    <nav class="td-submenu-nav navbar navbar-static-top navbar-default">
-      <div class="td-container-fluid container-fluid">
-        <ul class="nav navbar-nav">
-          <button type="button" class="td-submenu-button btn btn-success navbar-btn btn-xs js-save-quick-notes">Save</button>
-
-
-          <button type="button" class="unsaved-notes-star btn btn-default btn-xs">
-            <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
-          </button>
-
-
-
-        </ul>
-      </div>
-    </nav>
-    {{/if}}
-    {{/if}}
-
+    
   </div>
 
 </template>

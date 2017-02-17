@@ -12,10 +12,17 @@ body {
 /* ############################################################### */
 /* ############################################################### */
 /* top panel */
-.navbar {
+
+.td-main-menu-bar {
 	margin-bottom: 0px;
-	min-height: 25px;
+	min-height:30px !important;
 }
+
+.td-main-menu-bar > .container-fluid > .navbar-nav > li > a, .navbar-brand {
+    padding-top:5px !important; padding-bottom:0 !important;
+    height: 30px;
+}
+
 
 .td-submenu-nav {
 	min-height: 22px !important;
@@ -27,10 +34,9 @@ body {
 }
 
 .td-submenu-button {
-	border-radius: 0 !important;
-	margin: 0 auto !important;
 	outline: none !important;
-
+	margin-top: 4px !important;
+	margin-bottom: 4px !important;
 }
 
 
