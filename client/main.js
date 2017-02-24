@@ -166,7 +166,9 @@ Template.mainContent.events({
 		var inputField = $(event.target);
 		var newTask = inputField.val();
 		var activityId = inputField.parent().parent().attr("id");
-		var taskIndex = inputField.parent().index() / 2 - 1;
+		var taskIndex = inputField.parent().index() - 1;
+
+		console.log(newTask, activityId, taskIndex);
 
 		Meteor.call("modifyTask", newTask, activityId, taskIndex, Session.get("activities"), function(error, result) {
 			if (!Meteor.userId()) Session.set("activities", result);
@@ -184,7 +186,7 @@ Template.mainContent.events({
 		if (!Meteor.userId()) return;
 
 		var inputField = $(event.target);
-		var activityId = inputField.parent().attr("id");
+		var activityId = inputField.parent().parent().attr("id");
 		var newTitle = inputField.val();
 
 		Meteor.call("updateActivityTitle", activityId, newTitle, function() {
