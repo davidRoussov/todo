@@ -168,8 +168,6 @@ Template.mainContent.events({
 		var activityId = inputField.parent().parent().attr("id");
 		var taskIndex = inputField.parent().index() - 1;
 
-		console.log(newTask, activityId, taskIndex);
-
 		Meteor.call("modifyTask", newTask, activityId, taskIndex, Session.get("activities"), function(error, result) {
 			if (!Meteor.userId()) Session.set("activities", result);
 			$(event.target).css("color", "black");
