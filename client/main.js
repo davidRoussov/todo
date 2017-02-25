@@ -153,7 +153,9 @@ Template.mainContent.events({
 	"click .js-deleteButton":function(event) {
 		var button = $(event.currentTarget);
 		var activityId = button.parent().parent().attr("id");
-		var taskIndex = (button.parent().index()) / 2 - 1;
+		var taskIndex = button.parent().index() - 1;
+
+		console.log(activityId, taskIndex);
 
 		$(".js-deleteButton").prop("disabled", true);
 
