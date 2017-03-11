@@ -44,6 +44,7 @@ Template.mainContent.helpers({
 		}
 	},
 	windowWidth:function() {
+		console.log(window.innerWidth);
 		return window.innerWidth;
 	}
 });
@@ -58,8 +59,15 @@ Template.notes.helpers({
 		} else {
 			return [];
 		}
-
+	},
+	windowWidth:function() {
+		console.log(window.innerWidth);
+		return window.innerWidth;
 	}
+});
+
+Template.topPanel.helpers({
+	showUndoButton:function() { return Session.get("showUndoButton");}
 });
 
 Template.registerHelper('currentRouteIs', function (route) { 
@@ -155,8 +163,6 @@ Template.mainContent.events({
 		var activityId = button.parent().parent().attr("id");
 		var taskIndex = button.parent().index() - 1;
 
-		console.log(activityId, taskIndex);
-
 		$(".js-deleteButton").prop("disabled", true);
 
 	 	Meteor.call("deleteTask", activityId, taskIndex, Session.get("activities"), function(error, result) {
@@ -206,6 +212,10 @@ Template.mainContent.events({
 		
 		Meteor.call("deleteActivity", activityId, Session.get("activities"), function(error, result) {
 			if (!Meteor.userId()) Session.set("activities", result);
+
+			console.log(result);
+
+			Session.set("showUndoButton", true);
 		});
 	}
 
@@ -229,6 +239,22 @@ Template.note.rendered = function() {
 	renderMasonry();
 
 	$(".note-textarea").autosize();
+
+	
+	// a slider for changing input area length
+	$('#input-length-slider').bootstrapSlider({
+		formatter: function(value) {
+			$(".note").css("width", value - 48);
+
+			if ($(".grid-item").length > 0) {
+				$('.grid').masonry({
+				  // options
+				  itemSelector: '.grid-item'
+				});
+			}
+		},
+		tooltip: 'hide'
+	});
 };
 
 

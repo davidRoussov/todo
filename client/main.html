@@ -32,6 +32,10 @@
         {{/if}}
         {{#if currentRouteIs 'notes'}} 
         <button type="button" class="td-submenu-button btn btn-primary navbar-btn btn-xs js-addNoteButton">Add note</button>
+        {{/if}}
+
+        {{#if showUndoButton}}
+        <button type="button" class="td-submenu-button btn btn-warning navbar-btn btn-xs">Undo</button>       
         {{/if}}        
 
 
@@ -132,6 +136,10 @@
 
     {{/each}}
 
+  </div>
+
+  <div class="td-slider input-length-slider-container">
+    <input id="input-length-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max={{windowWidth}} data-slider-step="1" data-slider-value="400"/>
   </div>
 
 
