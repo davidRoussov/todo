@@ -28,7 +28,9 @@ Meteor.methods({
       		return activities;
       	} else {
        		var newDoc = createUpdatedDocument(activities);
-	    	Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);     		
+	    	Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);   
+
+	    	return newDoc;  		
       	}
 
 	},
@@ -49,7 +51,9 @@ Meteor.methods({
       		return activities;
       	} else {
        		var newDoc = createUpdatedDocument(activities);
-	    	Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);     		
+	    	Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc); 
+
+	    	return newDoc;    		
       	}
 	},
 	modifyTask:function(updateTask, activityId, taskIndex, activities) {
@@ -70,6 +74,8 @@ Meteor.methods({
       	} else {
 			var newDoc = createUpdatedDocument(activities);
 			Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
+
+			return newDoc;
 		}
 	},
 	updateActivityTitle:function(activityId, newTitle) {
@@ -84,6 +90,8 @@ Meteor.methods({
 
 		var newDoc = createUpdatedDocument(activities);
 		Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
+
+		return newDoc;
 	},
 	addNewActivity:function() {
 		var userExistence = Activities.findOne({"owner": Meteor.userId()});
@@ -111,6 +119,8 @@ Meteor.methods({
 			var newDoc = createUpdatedDocument(activities);
 			
 			Activities.insert(newDoc);
+
+			return newDoc;
 		}
 
 	},
@@ -133,6 +143,8 @@ Meteor.methods({
       	} else {
 			var newDoc = createUpdatedDocument(activities);
 			Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
+
+			return newDoc;
 		}
 	},
 	updateActivityRank:function(_id, newRank) {
@@ -143,6 +155,8 @@ Meteor.methods({
 				activities[i]["rank"] = newRank;
 				var newDoc = createUpdatedDocument(activities);
 				Activities.update({_id:Activities.findOne({"owner": Meteor.userId()})["_id"]}, newDoc);
+
+				return newDoc;
 			}
 		}
 	},

@@ -26,6 +26,10 @@
           <li class="{{#if currentRouteIs 'audiobooks'}}active{{/if}}"><a href="/audiobooks">Audiobooks</a></li>
           <li class="{{#if currentRouteIs 'Books'}}active{{/if}}"><a href="/Books">Books</a></li>
         </ul>
+
+        {{#if offline}}
+        <p style="color: red; display: inline-block;">You are offline</p>
+        {{/if}}
         
         {{#if currentRouteIs 'todo'}} 
         <button type="button" class="td-submenu-button btn btn-primary navbar-btn btn-xs js-addActivityButton">Add activity</button>
@@ -39,7 +43,7 @@
         {{/if}}        
 
 
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="loginButtons nav navbar-nav navbar-right">
           {{> loginButtons}}
         </ul>
 

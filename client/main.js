@@ -33,18 +33,38 @@ Accounts.ui.config({
 
 Template.mainContent.helpers({
 	activities:function() {
-		// try to get activities only if they exist
-		try { 
-			var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
-			activities = activities.sort(compare);
+		// // try to get activities only if they exist
+		// try { 
+		// 	var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
+		// 	activities = activities.sort(compare);
 
-			return activities;
-		} catch(err) {
+		// 	return activities;
+		// } catch(err) {
+		// 	return Session.get("activities");
+		// }
+		console.log(navigator.onLine);
+		var user = Activities.findOne({"owner": Meteor.userId()});
+		if (user) {
+
+			var online = navigator.onLine;
+			var activities;
+			if (online) {
+				activities = user.activities;
+				activities = activities.sort(compare);
+				return activities;
+			} else {
+				activities = localStorage.getItem("activities");
+				activities = JSON.parse(activities).activities;
+				console.log(activities);
+				return activities;
+			}
+
+		}
+		else {
 			return Session.get("activities");
 		}
 	},
 	windowWidth:function() {
-		console.log(window.innerWidth);
 		return window.innerWidth;
 	}
 });
@@ -67,7 +87,10 @@ Template.notes.helpers({
 });
 
 Template.topPanel.helpers({
-	showUndoButton:function() { return Session.get("showUndoButton");}
+	showUndoButton:function() { return Session.get("showUndoButton");},
+	offline: () => {
+		return !navigator.onLine;
+	}
 });
 
 Template.registerHelper('currentRouteIs', function (route) { 
@@ -155,7 +178,8 @@ Template.mainContent.events({
 		Meteor.call("addNewTask", activityId, Session.get("activities"), function(error, result) {
 			if (!Meteor.userId()) Session.set("activities", result);
 			button.prop("disabled", false);
-
+			console.log(result);
+			storeActivities(result);
 		});
 	},
 	"click .js-deleteButton":function(event) {
@@ -168,6 +192,7 @@ Template.mainContent.events({
 	 	Meteor.call("deleteTask", activityId, taskIndex, Session.get("activities"), function(error, result) {
 	 		if (!Meteor.userId()) Session.set("activities", result);
 	 		$(".js-deleteButton").prop("disabled", false);
+	 		storeActivities(result);
 	 	});
 	},
 	"change .js-task":function(event) {
@@ -179,6 +204,7 @@ Template.mainContent.events({
 		Meteor.call("modifyTask", newTask, activityId, taskIndex, Session.get("activities"), function(error, result) {
 			if (!Meteor.userId()) Session.set("activities", result);
 			$(event.target).css("color", "black");
+			storeActivities(result);
 		});
 	},
 	"input .js-task":function(event) {
@@ -197,6 +223,7 @@ Template.mainContent.events({
 
 		Meteor.call("updateActivityTitle", activityId, newTitle, function() {
 			$(event.target).css("color", "black");
+			storeActivities(result);
 		});
 	},
 	"input .js-activityTitle":function(event) {
@@ -213,7 +240,7 @@ Template.mainContent.events({
 		Meteor.call("deleteActivity", activityId, Session.get("activities"), function(error, result) {
 			if (!Meteor.userId()) Session.set("activities", result);
 
-			console.log(result);
+			storeActivities(result);
 
 			Session.set("showUndoButton", true);
 		});
@@ -338,4 +365,9 @@ function renderMasonry() {
 		itemSelector: '.grid-item',
 		gutterWidth: 5
 	});
+}
+
+function storeActivities(activities) {
+	activities = JSON.stringify(activities);
+	localStorage.setItem("activities", activities);
 }
