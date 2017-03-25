@@ -167,6 +167,10 @@ Template.notes.events({
 			Session.set("currentCategory", categoryID);
 			button.css("background-color", "rgb(224, 247, 224)");
 		}
+	},
+	"click .js-addNewNotesCategory": function(event) {
+		let newCategory = $("#userInputNewCategory").val();
+		Meteor.call("addNotesCategory", newCategory);
 	}
 
 });

@@ -271,7 +271,6 @@ Meteor.methods({
 		}
 	}
 
-
 });
 
 function createUpdatedDocumentNotes(activities) {
