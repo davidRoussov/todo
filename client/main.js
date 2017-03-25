@@ -33,16 +33,6 @@ Accounts.ui.config({
 
 Template.mainContent.helpers({
 	activities:function() {
-		// // try to get activities only if they exist
-		// try { 
-		// 	var activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
-		// 	activities = activities.sort(compare);
-
-		// 	return activities;
-		// } catch(err) {
-		// 	return Session.get("activities");
-		// }
-		console.log(navigator.onLine);
 		var user = Activities.findOne({"owner": Meteor.userId()});
 		if (user) {
 
@@ -55,7 +45,6 @@ Template.mainContent.helpers({
 			} else {
 				activities = localStorage.getItem("activities");
 				activities = JSON.parse(activities).activities;
-				console.log(activities);
 				return activities;
 			}
 
@@ -72,8 +61,21 @@ Template.mainContent.helpers({
 Template.notes.helpers({
 	notes:function() {
 		var user = Notes.findOne({"owner": Meteor.userId()});
-		if (user) {
-			var notes = user.notes;
+		if (user && user.notes) {
+
+			let allNotes = user.notes;
+			let notes = [];
+			let currentCategory = Session.get("currentCategory");
+
+			allNotes.map(note => {
+				if (!currentCategory && !note.category) {
+					notes.push(note);
+				}
+				else if (note.category === currentCategory) {
+					notes.push(note);
+				}
+			});
+
 			return notes.sort(compare);
 
 		} else {
@@ -81,9 +83,13 @@ Template.notes.helpers({
 		}
 	},
 	windowWidth:function() {
-		console.log(window.innerWidth);
 		return window.innerWidth;
-	}
+	},
+	notesCategory: function() {
+		var data = Notes.findOne({"owner": Meteor.userId()});
+		if (data)
+			return data.categories;
+	} 
 });
 
 Template.topPanel.helpers({
@@ -105,24 +111,8 @@ Template.registerHelper('currentRouteIs', function (route) {
 Template.topPanel.events({
 
 	"click .js-addNoteButton":function(event) {
-		Meteor.call("createNewNote");
-	},
-
-	"click .js-addActivityButton":function(event) {
-	  	Meteor.call("addNewActivity", function(error, newActivity) {
-
-	  		if (!Meteor.userId()) {
-	  			if (typeof Session.get("activities") == 'undefined') {
-	  				Session.set("activities", []);
-	  			}
-		  		var activities = Session.get("activities");
-		  		activities.push(newActivity);
-		  		Session.set("activities", activities);	  			
-	  		}
-
-	  	});
+		Meteor.call("createNewNote", Session.get("currentCategory"));
 	}
-
 
 });
 
@@ -155,12 +145,28 @@ Template.notes.events({
 		});
 	},
 	"click .js-deleteNote":function(event) {
-		var button = $(event.currentTarget);
-		var topicID = button.parent().attr("id");
+		var button = $(event.target);
+		var topicID = button.parent().parent().parent().parent().attr("id");
 
 		Meteor.call("deleteNote", topicID, function() {
 			renderMasonry(); // doesn't work
 		});
+	},
+	"click .js-change-note-category": function(event) {
+		var button = $(event.target);
+		var categoryID = button.attr("id");
+		var currentCategory = Session.get("currentCategory");
+
+		$(".notes-menu-category").each(function() {
+			$(this).css("background-color", "transparent");
+		});
+
+		if (currentCategory === categoryID) {
+			Session.set("currentCategory", null);
+		} else {
+			Session.set("currentCategory", categoryID);
+			button.css("background-color", "rgb(224, 247, 224)");
+		}
 	}
 
 });
@@ -244,10 +250,26 @@ Template.mainContent.events({
 
 			Session.set("showUndoButton", true);
 		});
+	},
+
+	"click .js-addActivityButton":function(event) {
+  		Meteor.call("addNewActivity", function(error, newActivity) {
+
+  		if (!Meteor.userId()) {
+  			if (typeof Session.get("activities") == 'undefined') {
+  				Session.set("activities", []);
+  			}
+	  		var activities = Session.get("activities");
+	  		activities.push(newActivity);
+	  		Session.set("activities", activities);	 
+
+	  		renderMasonry(); 			
+  		}
+
+  	});
 	}
 
 });
-
 
 Template.activity.rendered = function() {
 	renderMasonry();
@@ -260,7 +282,6 @@ Template.task.rendered = function() {
 };
 Template.notes.rendered = function() {
 	renderMasonry();
-
 };
 Template.note.rendered = function() {
 	renderMasonry();

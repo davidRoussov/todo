@@ -11,6 +11,9 @@ Meteor.publish("notes", function() {
 	return Notes.find();
 });
 
+
+var emptyNote
+
 Meteor.methods({
 	addNewTask:function(activityId, activities) {
 
@@ -100,7 +103,7 @@ Meteor.methods({
 
 		var json = {"title": "", "tasks": [], "rank": highestRank+1, _id: Random.id()};
 
-		// if user exists this if block is executed
+		// if user exists this block is executed
 		if (typeof userExistence != "undefined") {
 			activities = Activities.findOne({"owner": Meteor.userId()})["activities"];
 
@@ -170,16 +173,22 @@ Meteor.methods({
 
 
 
-	createNewNote:function() {
+	createNewNote:function(category) {
 		var emptyNote = {
 			_id: Random.id(),
 			topicName: "",
 			notes: "",
 			rank: getHighestRank("notes") + 1
 		};
+
+		if (category) emptyNote.category = category;
+
 		if (Notes.findOne({"owner": Meteor.userId()})) {
 			var json = Notes.findOne({"owner": Meteor.userId()});
-			json.notes.push(emptyNote);
+			if (json.notes)
+				json.notes.push(emptyNote);
+			else
+				json.notes = [emptyNote];
 			Notes.update({_id:Notes.findOne({"owner": Meteor.userId()})["_id"]}, json);	
 		} else {
 			var json = {
@@ -222,10 +231,56 @@ Meteor.methods({
 		}
 
 		Notes.update({_id:Notes.findOne({"owner": Meteor.userId()})["_id"]}, user);	
+	},
+	addNotesCategory: function(newCategory) {
+		var userExistence = Notes.findOne({"owner": Meteor.userId()});
+
+		var json = {_id: Random.id(), category: newCategory};
+
+		let categories;
+		if (typeof userExistence != "undefined") {
+			categories = Notes.findOne({"owner": Meteor.userId()})["categories"];
+			if (categories)
+				categories.push(json);
+			else
+				categories = [json];
+			Notes.update({_id:Notes.findOne({"owner": Meteor.userId()})["_id"]}, {$set: {categories: categories}});
+		}
+		else if (!Meteor.userId()) {
+			return json;
+		}
+		else {
+			categories = [json];
+
+			var emptyNote = {
+				_id: Random.id(),
+				topicName: "",
+				notes: "",
+				rank: getHighestRank("notes") + 1
+			};
+
+			var newDoc = {
+				"owner": Meteor.userId(),
+				"username": Meteor.user().username,
+				"categories": categories
+			}
+
+			Notes.insert(newDoc);
+
+			return newDoc;
+		}
 	}
 
 
 });
+
+function createUpdatedDocumentNotes(activities) {
+	return {
+		"owner": Meteor.userId(),
+		"username": Meteor.user().username,
+		"activities": activities
+	};
+}
 
 function createUpdatedDocument(activities) {
 	return {
@@ -245,7 +300,7 @@ function getHighestRank(mode) {
 			objarr = user["activities"];
 	} else if (mode == "notes") {
 		user = Notes.findOne({"owner": Meteor.userId()});
-		if (user == null)
+		if (user == null || !user.notes)
 			return 0;
 		else
 			objarr = user["notes"];

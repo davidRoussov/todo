@@ -31,9 +31,7 @@
         <p style="color: red; display: inline-block; margin: 0 auto;">You are offline</p>
         {{/if}}
         
-        {{#if currentRouteIs 'todo'}} 
-        <button type="button" class="td-submenu-button btn btn-primary navbar-btn btn-xs js-addActivityButton">Add activity</button>
-        {{/if}}
+
         {{#if currentRouteIs 'notes'}} 
         <button type="button" class="td-submenu-button btn btn-primary navbar-btn btn-xs js-addNoteButton">Add note</button>
         {{/if}}
@@ -56,15 +54,29 @@
 
 <template name="mainContent">
 
-    <div class="grid all-activities">
+  <div class="main-content">
 
-      {{#each activities}}
-
-        {{> activity}}
-
-      {{/each}}
-
+    <div class="sidebar-options">
+      <div class="add-activity-button-container">
+        <button type="button" class="btn btn-default js-addActivityButton glyph-button" aria-label="Left Align">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>
+      </div>
     </div>
+
+    <div class="all-activities">
+      <div class="grid">
+
+        {{#each activities}}
+
+          {{> activity}}
+
+        {{/each}}
+
+      </div>
+    </div>
+
+  </div>
 
   <div class="td-slider input-length-slider-container">
     <input id="input-length-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max={{windowWidth}} data-slider-step="1" data-slider-value="400"/>
@@ -132,13 +144,29 @@
 
 <template name="notes">
 
-  <div class="grid all-notes">
+  <div class="main-content">
 
-    {{#each notes}}
+    <div class="sidebar-menu-notes">
 
-      {{> note}}
+      {{#each notesCategory}}
 
-    {{/each}}
+        <button id={{_id}} type="button" class="notes-menu-category js-change-note-category">{{category}}</button>
+
+      {{/each}}
+
+    </div>
+
+    <div class="all-notes">
+      <div class="grid">
+
+        {{#each notes}}
+
+          {{> note}}
+
+        {{/each}}
+
+      </div>
+    </div>
 
   </div>
 
@@ -153,22 +181,18 @@
 
     <div class="grid-item note" id={{_id}}>
 
-
-
-      <button type="button" class="btn btn-default btn-xs glyph-button js-deleteNote">
-        <span class="glyphicon glyphicon-remove"></span>
-      </button>
-
-
+      <div class="dropdown note-options-dropdown-container">
+        <button class="btn btn-default dropdown-toggle glyph-button notes-options-button" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <span class="glyphicon glyphicon-option-horizontal"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="" class="js-deleteNote">Delete</a></li>
+        </ul>
+      </div>
 
 
       <div class="textarea-container">
         <textarea rows="1" class="note-textarea note-title js-notesTitle" placeholder="Title" >{{topicName}}</textarea>
-
-
-
-
-
         <br>
         <textarea rows="1" class="note-textarea note-content js-notesContent" placeholder="Note" >{{notes}}</textarea>
       </div>

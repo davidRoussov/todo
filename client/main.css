@@ -63,10 +63,10 @@ body {
 
 
 
-
+/* Buttons for adding/removing */
 .glyph-button {
 	border: none;
-	background-color: transparent;
+	background-color: transparent !important;
 	float: right;
 
 }
@@ -96,8 +96,29 @@ body {
 /* ############################################################### */
 /* ############################################################### */
 /* mainContent */
+
+.main-content {
+	width: 100%;
+}
+
+.sidebar-options {
+	height: 100vh;
+	width: 3%;
+	background-color: #C0C0C0;
+	float: left;
+}
+
+.add-activity-button-container {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 38px;
+}
+
 .all-activities {
+	width: 97%;
 	padding: 5px;
+	display: inline-block;
 }
 
 .activity {
@@ -108,18 +129,6 @@ body {
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 	padding: 5px;
 }
-
-
-/*.input-field {
-	background-color: transparent;
-	border: none;
-	outline: none;
-
-}
-
-.activityTitle {
-	font-size: 20px;
-}*/
 
 .td-row {
 	display: inline-flex;
@@ -144,13 +153,19 @@ body {
 /* ############################################################### */
 /* ############################################################### */
 /* quick notes */
-.notes-panel {
-	width: 100%;
-	height: 100%;
+
+.sidebar-menu-notes {
+	height: 100vh;
+	width: 7%;
+	background-color: #D8D8D8;
+	float: left;
+	border-right: 1px solid #C8C8C8;
 }
 
 .all-notes {
 	padding: 10px;
+	width: 93%;
+	display: inline-block;
 }
 
 .note {
@@ -183,4 +198,22 @@ body {
 .note-content {
 }
 
+.note-options-dropdown-container {
+	float: right;
+}
+.notes-options-button {
+	height: 8px;
+	padding-bottom: 12px;
+}
 
+.notes-menu-category {
+	width: 100%;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.notes-menu-category:hover {
+	background-color: #F0F0F0;
+}
