@@ -269,6 +269,24 @@ Meteor.methods({
 
 			return newDoc;
 		}
+	},
+	deleteNotesCategory: function(categoryID) {
+		let notes = Notes.findOne({"owner": Meteor.userId()});
+
+		notes.categories.forEach((category, index) => {
+			if (category._id === categoryID) {
+				notes.categories.splice(index, 1);
+			}
+		});
+
+		for (let i = notes.notes.length - 1; i >= 0; i--) {
+			if (notes.notes[i].category === categoryID) {
+				notes.notes.splice(i, 1);
+			}
+		}
+
+		var notesID = Notes.findOne({"owner": Meteor.userId()})._id;
+		Notes.update(notesID, notes);
 	}
 
 });

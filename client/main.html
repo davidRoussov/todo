@@ -32,10 +32,6 @@
         {{/if}}
         
 
-        {{#if currentRouteIs 'notes'}} 
-        <button type="button" class="td-submenu-button btn btn-primary navbar-btn btn-xs js-addNoteButton">Add note</button>
-        {{/if}}
-
         {{#if showUndoButton}}
         <button type="button" class="td-submenu-button btn btn-warning navbar-btn btn-xs">Undo</button>       
         {{/if}}        
@@ -56,14 +52,6 @@
 
   <div class="main-content">
 
-    <div class="sidebar-options">
-      <div class="add-activity-button-container">
-        <button type="button" class="btn btn-default js-addActivityButton glyph-button" aria-label="Left Align">
-          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        </button>
-      </div>
-    </div>
-
     <div class="all-activities">
       <div class="grid">
 
@@ -78,8 +66,13 @@
 
   </div>
 
-  <div class="td-slider input-length-slider-container">
-    <input id="input-length-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max={{windowWidth}} data-slider-step="1" data-slider-value="400"/>
+
+  <div class="td-fixed-options-container">
+    <button type="button" class="btn btn-primary btn-xs js-addActivityButton td-add-activity-button" aria-label="Left Align">Add activity</button>
+
+    <div class="td-slider input-length-slider-container">
+      <input id="input-length-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max={{windowWidth}} data-slider-step="1" data-slider-value="400"/>
+    </div>
   </div>
 
 
@@ -149,10 +142,19 @@
     <div class="sidebar-menu-notes">
 
       {{#each notesCategory}}
-
-        <button id={{_id}} type="button" class="notes-menu-category js-change-note-category">{{category}}</button>
-
+      <div id={{_id}} class="btn-group quick-notes-category-button-group">
+        <button type="button" class="btn btn-primary quick-notes-category-button quick-notes-category-button-main js-change-note-category">{{category}}</button>
+        <button type="button" class="btn btn-primary dropdown-toggle quick-notes-category-button quick-notes-category-button-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="#" class="js-delete-notes-category">Delete</a></li>
+          <li><a href="#" class="js-edit-notes-category">Edit</a></li>
+        </ul>
+      </div>
       {{/each}}
+
 
       <button type="button" class="btn btn-default glyph-button" data-toggle="modal" data-target="#addNewCategoryModal">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -175,22 +177,9 @@
               <button type="button" class="btn btn-primary js-addNewNotesCategory">Submit</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
-          </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-      </div><!-- /.modal -->
-
-
-
-
-
-
-
-
-
-
-
-
-
+          </div>
+        </div>
+      </div>
 
 
 
@@ -210,8 +199,15 @@
 
   </div>
 
-  <div class="td-slider input-length-slider-container">
-    <input id="input-length-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max={{windowWidth}} data-slider-step="1" data-slider-value="400"/>
+
+  <div id="notes-fixed-options-container">
+
+    <button type="button" class="btn btn-primary btn-xs js-addNoteButton add-note-button">Add note</button>
+
+    <div class="notes-slider input-length-slider-container">
+      <input id="input-length-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max={{windowWidth}} data-slider-step="1" data-slider-value="400"/>
+    </div>
+
   </div>
 
 

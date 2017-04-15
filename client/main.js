@@ -107,15 +107,6 @@ Template.registerHelper('currentRouteIs', function (route) {
 });
 
 
-
-Template.topPanel.events({
-
-	"click .js-addNoteButton":function(event) {
-		Meteor.call("createNewNote", Session.get("currentCategory"));
-	}
-
-});
-
 Template.notes.events({
 
 	"input .js-notesTitle":function(event) {
@@ -154,23 +145,51 @@ Template.notes.events({
 	},
 	"click .js-change-note-category": function(event) {
 		var button = $(event.target);
-		var categoryID = button.attr("id");
+		var categoryID = button.parent().attr("id");
 		var currentCategory = Session.get("currentCategory");
 
-		$(".notes-menu-category").each(function() {
-			$(this).css("background-color", "transparent");
+		$(".quick-notes-category-button").each(function() {
+			$(this).removeClass("btn-success");
+			$(this).addClass("btn-primary");
 		});
 
 		if (currentCategory === categoryID) {
 			Session.set("currentCategory", null);
 		} else {
 			Session.set("currentCategory", categoryID);
-			button.css("background-color", "rgb(224, 247, 224)");
+			button.removeClass("btn-primary").addClass("btn-success");
+			button.next().removeClass("btn-primary").addClass("btn-success");
 		}
 	},
 	"click .js-addNewNotesCategory": function(event) {
 		let newCategory = $("#userInputNewCategory").val();
-		Meteor.call("addNotesCategory", newCategory);
+		Meteor.call("addNotesCategory", newCategory, function() {
+			$("#addNewCategoryModal").modal("toggle");
+		});
+	},
+	"click .js-addNoteButton":function(event) {
+		Meteor.call("createNewNote", Session.get("currentCategory"));
+	},
+	"click .js-delete-notes-category": function(event) {
+		let button = $(event.target);
+		let categoryID = button.parent().parent().parent().attr("id");
+
+		Meteor.call("deleteNotesCategory", categoryID, function() {
+			if (Session.get("currentCategory") === categoryID) {
+				Session.set("currentCategory", null);
+			}
+		});
+	},
+
+	"click .js-edit-notes-category": function(event) {
+	},
+
+	"keyup .js-notes-submit-category-edit": function(event) {
+		let input = $(event.target);
+		let categoryID = input.attr("id");
+		let newCategoryName = input.val();
+
+		console.log(categoryID, newCategoryName);
 	}
 
 });

@@ -43,26 +43,6 @@ body {
 
 
 
-
-
-/* SLIDER */
-.input-length-slider-container {
-	padding-left: 20px;
-	padding-top: 20px;
-
-}
-.td-slider {
-	position: fixed;
-	bottom: 20px;
-	right: 40px;
-}
-
-
-
-
-
-
-
 /* Buttons for adding/removing */
 .glyph-button {
 	border: none;
@@ -99,20 +79,7 @@ body {
 
 .main-content {
 	width: 100%;
-}
-
-.sidebar-options {
-	height: 100vh;
-	width: 3%;
-	background-color: #C0C0C0;
-	float: left;
-}
-
-.add-activity-button-container {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	width: 38px;
+	height: 100%;
 }
 
 .all-activities {
@@ -147,25 +114,56 @@ body {
 	font-size: 12px !important;
 }
 
+.td-fixed-options-container {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+}
 
+.td-add-activity-button {
+	width: 72px;
+	float: left;
+	margin: 0px !important;
+}
 
+.td-slider {	
+	margin-left: 82px;
+}
 
 /* ############################################################### */
 /* ############################################################### */
 /* quick notes */
 
+/* SIDEBAR */
 .sidebar-menu-notes {
-	height: 100vh;
-	width: 7%;
-	background-color: #D8D8D8;
+	height: 100%;
+	width: 10%;
+	background-color: #337ab7;
 	float: left;
-	border-right: 1px solid #C8C8C8;
 }
+
+.quick-notes-category-button-group {
+	width: 100%;
+}
+
+.quick-notes-category-button {
+	border-radius: 0px;
+	border: none;
+	outline: none !important;
+}
+
+.quick-notes-category-button-main {
+	width: 80% !important;
+}
+
+.quick-notes-category-button-options {
+	width: 20% !important;
+}
+/* END SIDEBAR */
 
 .all-notes {
 	padding: 10px;
-	width: 93%;
-	display: inline-block;
+	margin-left: 10%;
 }
 
 .note {
@@ -217,3 +215,23 @@ body {
 .notes-menu-category:hover {
 	background-color: #F0F0F0;
 }
+
+/* NOTES OPTIONS CONTAINER */
+
+#notes-fixed-options-container {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+}
+
+.add-note-button {
+	width: 61px;
+	float: left;
+	margin: 0px !important;
+}
+
+.notes-slider {
+	margin-left: 72px;
+}
+
+/* END NOTES OPTIONS CONTAINER */
