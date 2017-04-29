@@ -93,7 +93,6 @@ Template.notes.helpers({
 });
 
 Template.topPanel.helpers({
-	showUndoButton:function() { return Session.get("showUndoButton");},
 	offline: () => {
 		return !navigator.onLine;
 	}
@@ -149,23 +148,35 @@ Template.notes.events({
 		var currentCategory = Session.get("currentCategory");
 
 		$(".quick-notes-category-button").each(function() {
-			$(this).removeClass("btn-success");
-			$(this).addClass("btn-primary");
+			$(this).removeClass("quick-note-category-button-active").addClass("quick-note-category-button-inactive");
 		});
 
 		if (currentCategory === categoryID) {
 			Session.set("currentCategory", null);
 		} else {
 			Session.set("currentCategory", categoryID);
-			button.removeClass("btn-primary").addClass("btn-success");
-			button.next().removeClass("btn-primary").addClass("btn-success");
+			button.removeClass("quick-note-category-button-inactive").addClass("quick-note-category-button-active");
+			button.next().removeClass("quick-note-category-button-inactive").addClass("quick-note-category-button-active");
 		}
 	},
 	"click .js-addNewNotesCategory": function(event) {
 		let newCategory = $("#userInputNewCategory").val();
 		Meteor.call("addNotesCategory", newCategory, function() {
 			$("#addNewCategoryModal").modal("toggle");
+			$("#userInputNewCategory").val("");
 		});
+	},
+	"keyup #addNewCategoryModal": function(event) {
+
+		let keypress= event.which;
+
+		if (keypress === 13) {
+			let newCategory = $("#userInputNewCategory").val();
+			Meteor.call("addNotesCategory", newCategory, function() {
+				$("#addNewCategoryModal").modal("toggle");
+				$("#userInputNewCategory").val("");
+			});
+		}
 	},
 	"click .js-addNoteButton":function(event) {
 		Meteor.call("createNewNote", Session.get("currentCategory"));
@@ -182,14 +193,31 @@ Template.notes.events({
 	},
 
 	"click .js-edit-notes-category": function(event) {
+		let button = $(event.target);
+		let categoryID = button.parent().parent().parent().attr("id");
+		Session.set("currentEditCategory", categoryID);
 	},
+	"click .js-submit-edit-notes-category": function(event) {
+		let newCategoryName = $("#userInputEditCategory").val();
+		let categoryID = Session.get("currentEditCategory");
+		Meteor.call("editNotesCategory", categoryID, newCategoryName, function() {
+			Session.set("currentEditCategory", null);
+			$("#editCategoryModal").modal("toggle");
+			$("#userInputEditCategory").val("");
+		});
+	},
+	"keyup #editCategoryModal": function(event) {
+		let keypress= event.which;
 
-	"keyup .js-notes-submit-category-edit": function(event) {
-		let input = $(event.target);
-		let categoryID = input.attr("id");
-		let newCategoryName = input.val();
-
-		console.log(categoryID, newCategoryName);
+		if (keypress === 13) {
+			let newCategoryName = $("#userInputEditCategory").val();
+			let categoryID = Session.get("currentEditCategory");
+			Meteor.call("editNotesCategory", categoryID, newCategoryName, function() {
+				Session.set("currentEditCategory", null);
+				$("#editCategoryModal").modal("toggle");
+				$("#userInputEditCategory").val("");
+			});
+		}
 	}
 
 });
@@ -207,7 +235,6 @@ Template.mainContent.events({
 		Meteor.call("addNewTask", activityId, Session.get("activities"), function(error, result) {
 			if (!Meteor.userId()) Session.set("activities", result);
 			button.prop("disabled", false);
-			console.log(result);
 			storeActivities(result);
 		});
 	},
@@ -270,8 +297,6 @@ Template.mainContent.events({
 			if (!Meteor.userId()) Session.set("activities", result);
 
 			storeActivities(result);
-
-			Session.set("showUndoButton", true);
 		});
 	},
 
@@ -305,6 +330,10 @@ Template.task.rendered = function() {
 };
 Template.notes.rendered = function() {
 	renderMasonry();
+ 
+	// colouring current category if one was selected 
+	let currentCategory = Session.get("currentCategory");
+	$("#" + currentCategory).find(".quick-notes-category-button").removeClass("quick-note-category-button-inactive").addClass("quick-note-category-button-active");
 };
 Template.note.rendered = function() {
 	renderMasonry();

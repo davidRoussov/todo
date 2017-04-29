@@ -287,6 +287,19 @@ Meteor.methods({
 
 		var notesID = Notes.findOne({"owner": Meteor.userId()})._id;
 		Notes.update(notesID, notes);
+	},
+
+	editNotesCategory: function(categoryID, newCategoryName) {
+		let notes = Notes.findOne({"owner": Meteor.userId()});
+
+		notes.categories.forEach((category, index) => {
+			if (category._id === categoryID) {
+				category.category = newCategoryName;
+			}
+		});
+
+		var notesID = Notes.findOne({"owner": Meteor.userId()})._id;
+		Notes.update(notesID, notes);
 	}
 
 });

@@ -137,8 +137,8 @@ body {
 /* SIDEBAR */
 .sidebar-menu-notes {
 	height: 100%;
-	width: 10%;
-	background-color: #337ab7;
+	width: 120px;
+	background-color: #333;
 	float: left;
 }
 
@@ -150,6 +150,7 @@ body {
 	border-radius: 0px;
 	border: none;
 	outline: none !important;
+	background-color: #333;
 }
 
 .quick-notes-category-button-main {
@@ -159,11 +160,27 @@ body {
 .quick-notes-category-button-options {
 	width: 20% !important;
 }
+.quick-notes-category-button-options:hover, .quick-notes-category-button-options:focus, .quick-notes-category-button-options:active {
+	background-color: transparent !important;
+}
+
+.quick-note-category-button-inactive,
+.quick-note-category-button-inactive:active,
+.quick-note-category-button-inactive:focus,
+.quick-note-category-button-inactive:hover {
+	color: white !important;
+}
+.quick-note-category-button-active,
+.quick-note-category-button-active:active,
+.quick-note-category-button-active:focus,
+.quick-note-category-button-active:hover {
+	color: green !important;
+}
 /* END SIDEBAR */
 
 .all-notes {
 	padding: 10px;
-	margin-left: 10%;
+	margin-left: 120px;
 }
 
 .note {
@@ -235,3 +252,17 @@ body {
 }
 
 /* END NOTES OPTIONS CONTAINER */
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -16,15 +16,12 @@
       <div class="container-fluid">
 
         <div class="navbar-header">
-          <a class="navbar-brand" href="/">Activities</a>
+          <a class="navbar-brand" href="/" style="width: 120px; text-align: center">Activities</a>
         </div>
 
         <ul class="nav navbar-nav">
           <li class="{{#if currentRouteIs 'todo'}}active{{/if}}"><a href="/todo">To-do</a></li>
           <li class="{{#if currentRouteIs 'notes'}}active{{/if}}"><a href="/notes">Quick notes</a></li>
-          <li class="{{#if currentRouteIs 'podcasts'}}active{{/if}}"><a href="/podcasts">Podcasts</a></li>
-          <li class="{{#if currentRouteIs 'audiobooks'}}active{{/if}}"><a href="/audiobooks">Audiobooks</a></li>
-          <li class="{{#if currentRouteIs 'Books'}}active{{/if}}"><a href="/Books">Books</a></li>
         </ul>
 
         {{#if offline}}
@@ -143,21 +140,21 @@
 
       {{#each notesCategory}}
       <div id={{_id}} class="btn-group quick-notes-category-button-group">
-        <button type="button" class="btn btn-primary quick-notes-category-button quick-notes-category-button-main js-change-note-category">{{category}}</button>
-        <button type="button" class="btn btn-primary dropdown-toggle quick-notes-category-button quick-notes-category-button-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="btn quick-notes-category-button quick-notes-category-button-main js-change-note-category quick-note-category-button-inactive">{{category}}</button>
+        <button type="button" class="btn dropdown-toggle quick-notes-category-button quick-notes-category-button-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white">
           <span class="caret"></span>
           <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu">
           <li><a href="#" class="js-delete-notes-category">Delete</a></li>
-          <li><a href="#" class="js-edit-notes-category">Edit</a></li>
+          <li><a href="#" data-toggle="modal" class="js-edit-notes-category" data-target="#editCategoryModal">Edit</a></li>
         </ul>
       </div>
       {{/each}}
 
 
       <button type="button" class="btn btn-default glyph-button" data-toggle="modal" data-target="#addNewCategoryModal">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color: white"></span>
       </button>
 
       <div class="modal fade" id="addNewCategoryModal">
@@ -181,9 +178,31 @@
         </div>
       </div>
 
+      <div class="modal fade" id="editCategoryModal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <h4 class="modal-title">Enter new category name</h4>
+            </div>
+            <div class="modal-body">
+              <input id="userInputEditCategory" type="text" class="form-control">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary js-submit-edit-notes-category">Submit</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
     </div>
+
+
 
     <div class="all-notes">
       <div class="grid">
